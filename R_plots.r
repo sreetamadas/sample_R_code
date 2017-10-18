@@ -44,7 +44,7 @@ library(ggplot2)
 ggplot(data=df, aes(as.POSIXct(df$time), df$y)) + geom_point(size=0.2, colour=as.factor(df$colour)) +  # color by factor
   labs(x="time", y="Y") + ylim(0,180) + 
   geom_line(size=0.1, colour=as.factor(df$colour)) +  # colour="blue"
-  geom_hline(yintercept=10) +  # adding horizontal line to plot
+  geom_hline(data=df, aes(yintercept=10), linetype='dashed') +  # adding horizontal line to plot
   theme(axis.text=element_text(size=14), axis.title=element_text(size=14,face="bold"))) 
 
 
@@ -112,7 +112,8 @@ ggplot(tmp_df, aes(tmp_df$day_of_week, tmp_df$y)) +
   geom_boxplot(width=0.4, fill='green') +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   labs(x='day', y='Y') + 
-  theme(axis.text=element_text(size=14), axis.title=element_text(size=16))  
+  theme(axis.text=element_text(size=14), axis.title=element_text(size=16))  + 
+  coord_cartesian(ylim=c(0,100)) # used to zoom into a selected section
 
 
 
