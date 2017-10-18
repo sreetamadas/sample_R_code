@@ -149,6 +149,15 @@ ggplot(tmp_df, aes(as.POSIXct(tmp_df$Date), tmp_df$y)) +
   labs(x='time', y='Y') +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
   theme(axis.text=element_text(size=14), axis.title=element_text(size=16))
+# method 2, sorted by the variable on X-axis
+ggplot(df, aes(x = reorder(df$Model, -df$totalcount), df$y)) +
+  geom_bar(stat="identity", width = 0.5) + #geom_point() + geom_line() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  labs(x='model', y='cumulative count (%)') +
+  geom_hline(data=df, aes(yintercept=80), linetype='dashed') +
+  geom_hline(data=df, aes(yintercept=50), linetype='dashed') +
+  theme(axis.text=element_text(size=8), axis.title=element_text(size=12))
+
 
 
 
@@ -165,6 +174,23 @@ library(plotrix)
 attach(mtcars, warn.conflicts = FALSE)
 color2D.matplot(z,c(1,0),c(0,1),c(0,0), show.legend=FALSE,xlab="Column",ylab="Row",do.hex=FALSE,axes=TRUE,show.values=FALSE) 
 # black-green: c(0,0),c(0,1),c(0,0); white-black: c(1,0),c(1,0),c(1,0); white-green: c(1,0),c(1,1),c(1,0) [low - high scales]
+
+
+## plot heatmap
+# method 1 : mat
+library(corrplot)
+corrplot(t(mat),is.corr = FALSE, method='square')
+#corrplot(t(mat),is.corr = FALSE, method='color')
+# method 2
+heatmap(t(mat), Colv = F) #, scale= 'none')
+# method 3
+library(RColorBrewer)
+corrplot(t(mat),is.corr = FALSE, method='color', col=brewer.pal(n=9, name='Blues'))
+# method 4
+library(plotrix)
+color2D.matplot(t(mat), show.legend=FALSE,do.hex=FALSE,axes=TRUE,show.values=FALSE) 
+#color2D.matplot(t(mat),c(1,0),c(0,1),c(0,0), show.legend=FALSE,do.hex=FALSE,axes=TRUE,show.values=FALSE) 
+
 
 ###############################################################
 ### color & shape by factor
