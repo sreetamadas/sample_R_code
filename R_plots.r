@@ -160,7 +160,11 @@ symbols(df$X, df$Y, circles=radius)
 symbols(df$X, df$Y, circles=radius, bg=as.numeric(df$size), xlab= "bin", ylab= "SD")
 
 
-### plot a matrix by color
+### plot a matrix z by color
+library(plotrix)
+attach(mtcars, warn.conflicts = FALSE)
+color2D.matplot(z,c(1,0),c(0,1),c(0,0), show.legend=FALSE,xlab="Column",ylab="Row",do.hex=FALSE,axes=TRUE,show.values=FALSE) 
+# black-green: c(0,0),c(0,1),c(0,0); white-black: c(1,0),c(1,0),c(1,0); white-green: c(1,0),c(1,1),c(1,0) [low - high scales]
 
 ###############################################################
 ### color & shape by factor
@@ -199,10 +203,21 @@ ggplot(data=df, aes(x=time, y=y, color=as.factor(id), shape=as.factor(id))) +
 
 # method 3: if using plot() and coloring by factors, use type='b' and not lineplot i.e. type='l'
 ### changing line width (lwd) & type (lty) =>  http://www.statmethods.net/advgraphs/parameters.html
+
 ##########################################################
 ## Dual axis plot 
-
-
+par(mar=c(5,4,4,5)+.1)  # sets bottom, left, top and right margins respectively of the plot region in number of lines of text
+plot(x,y1,type="l", lwd=2, col="red", xlab="",ylab="", ylim=c(0,250))
+par(new=T)
+lines(x,y2,type="l", lwd=2, col="blue", xlab="",ylab="")
+par(new=T)
+lines(x,y3,type="l", lwd=2, col="green", xlab="",ylab="")
+par(new=T)
+plot(x,Z1,type="l",col="black", lty=2, lwd=3, xaxt="n",yaxt="n",xlab="",ylab="", ylim=c(0,100))
+axis(4)
+mtext("Y",side=2,line=2)
+mtext("Z",side=4,line=3)
+legend("bottomleft",col=c("red","blue","green","black"),lty=1,legend=c("Y1","Y2","Y3","Z"))
 
 ############################################################
 ## multiple line plots on the same figure
@@ -222,7 +237,7 @@ install.packages("zoom")
 library(zoom)
 zm()
 
-
+###########################################################
 #### place tick marks ##
 plot(..., xaxp  = c(x1, x2, n))
 
