@@ -1,5 +1,8 @@
 ##################################################
-##### plots in R: base graphics, ggplot ####
+##### plots in R: base graphics, ggplot #####
+# scatterplot (2D, 3D), histogram & density plot, boxplot, violinPlot, barplot, bubblePlot
+# heatmap & matrices
+# multiple plots, dual axes, facet wrap & grid, cowplot
 
 #####################################################################
 ### set the layout of a plot 
@@ -48,11 +51,10 @@ ggplot(data=df, aes(as.POSIXct(df$time), df$y)) + geom_point(size=0.2, colour=as
   theme(axis.text=element_text(size=14), axis.title=element_text(size=14,face="bold"))) 
 
 
-## scatter plot for all variables in a datafarme
+### scatter plot for all variables in a datafarme
 new <- df[,5:8]  # save columns 5-8 with numeric data fram df
 pairs(new)  # plots the paired scatterplots
 cor(new)  # check correlation among the variables
-
 
 
 ### 2D scatter plot with transparency
@@ -104,7 +106,7 @@ boxplot( l0$x, l0$y,  l0$z,
          ylab='variable', xlab='Level', cex.axis=1, cex.lab=1.5,
          at=c(1,2,3, 5,6,7, 9,10,11, 13,14,15, 17,18,19))
          legend("topleft", legend=c("X","Y","Z"), fill=c("red","gold","green"), cex=1.0) #, notch=TRUE)
-## add a horizontal line to the plot at a specified y value 
+# add a horizontal line to the plot at a specified y value 
 abline(h=10, col="red") # adding horizontal line at y=10
 abline(a=0,b=1) # adding line a+bx
 # method 2: using ggplot
@@ -158,8 +160,6 @@ ggplot(df, aes(x = reorder(df$Model, -df$totalcount), df$y)) +
   geom_hline(data=df, aes(yintercept=80), linetype='dashed') +
   geom_hline(data=df, aes(yintercept=50), linetype='dashed') +
   theme(axis.text=element_text(size=8), axis.title=element_text(size=12))
-
-
 
 
 ### bubble plot 
@@ -228,7 +228,33 @@ ggplot(data=df, aes(x=time, y=y, color=as.factor(id), shape=as.factor(id))) +
   geom_point() + geom_line(size=0.1) + scale_x_datetime(date_minor_breaks = "1 day")
 
 
-# method 3: if using plot() and coloring by factors, use type='b' and not lineplot i.e. type='l'
+# method 3: if the no. of factors > 6, above won't work; set up colour & shape scale
+set_col <- c('M1' = 'purple', 'M2' = 'cyan3', 'M3' = 'green', 'M4' = 'hotpink',
+             'M5' = 'purple', 'M6' = 'cyan3', 'M7' = 'green', 'M8' = 'hotpink',
+             'M9' = 'purple', 'M10' = 'cyan3', 'M11' = 'green', 'M12' = 'hotpink',
+             'M13' = 'purple', 'M14' = 'cyan3', 'M15' = 'green', 'M16' = 'hotpink',
+             'M17' = 'purple', 'M18' = 'cyan3', 'M19' = 'green', 'M20' = 'hotpink',
+             'M21' = 'purple', 'M22' = 'cyan3', 'M23' = 'green', 'M24' = 'hotpink',
+             'M25' = 'purple', 'M26' = 'cyan3', 'M27' = 'green', 'M28' = 'hotpink',
+             'M29' = 'purple', 'M30' = 'cyan3', 'M31' = 'green', 'M32' = 'hotpink')
+set_shape <- c('M1' = 23, 'M2' = 19, 'M3' = 22, 'M4' = 24,
+               'M5' = 19, 'M6' = 22, 'M7' = 24, 'M8' = 23,
+               'M9' = 22, 'M10' = 24, 'M11' = 23, 'M12' = 19,
+               'M13' = 24, 'M14' = 23, 'M15' = 19, 'M16' = 22,
+               'M17' = 4, 'M18' = 7, 'M19' = 8, 'M20' = 10,
+               'M21' = 7, 'M22' = 8, 'M23' = 10, 'M24' = 4,
+               'M25' = 8, 'M26' = 10, 'M27' = 4, 'M28' = 7,
+               'M29' = 10, 'M30' = 4, 'M31' = 7, 'M32' = 8)
+ggplot(data = df, aes(x = df$x, y = df$y, 
+                           colour = df$id, shape = df$id)) + 
+  geom_line(size=0.2) + geom_point(size=2) + #coord_cartesian(ylim = c(0,50)) + # used to zoom into a selected section
+  scale_color_manual(values=set_col) +
+  scale_shape_manual(values=set_shape) + 
+  geom_hline(data=df, aes(yintercept=10), linetype='dashed') +
+  theme(axis.text=element_text(size=16), axis.title=element_text(size=18))) 
+
+
+# method 4: if using plot() and coloring by factors, use type='b' and not lineplot i.e. type='l'
 ### changing line width (lwd) & type (lty) =>  http://www.statmethods.net/advgraphs/parameters.html
 
 ##########################################################
@@ -257,6 +283,16 @@ legend("topleft",col=c("red","blue","green"), lty=1, legend=c("x","y","z"))
 par(new=F)
 dev.off()
 
+############################################################
+### use of facet wrap & facet grid to plot data for multiple groups (factors or IDs)
+ggplot(data = df, aes(x = df$x, y = df$y)) + 
+  geom_line(size=0.05) + geom_point(size=0.8) + coord_cartesian(ylim = c(0,5)) + 
+  facet_wrap(~ df$id) + labs(x='X', y='Y') + 
+  geom_hline(data= df, aes(yintercept = 2)) +
+  geom_hline(data= df, aes(yintercept = 1))
+
+ggplot(data = df, aes(x = df$x, y = df$y)) + 
+  geom_line() + geom_point() + coord_cartesian(ylim = c(0,3)) + facet_grid(df$id~.)
 
 ############################################################
 ####  zoom into a plot ####
