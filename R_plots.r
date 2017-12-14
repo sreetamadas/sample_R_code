@@ -160,6 +160,16 @@ ggplot(df, aes(x = reorder(df$Model, -df$totalcount), df$y)) +
   geom_hline(data=df, aes(yintercept=80), linetype='dashed') +
   geom_hline(data=df, aes(yintercept=50), linetype='dashed') +
   theme(axis.text=element_text(size=8), axis.title=element_text(size=12))
+# method 3, bars colored by gradient, according to value
+ggplot(df, aes(x= reorder(df$Model,-df$value), df$value, fill=df$value)) + 
+  geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  labs(x='model', y='value') + geom_hline(data=df, aes(yintercept=median(df$value)), linetype='dashed', color='black') +
+  theme(axis.text=element_text(size=10), axis.title=element_text(size=16)) + 
+  scale_fill_gradient2(low='blue', mid='white', high='red', space='Lab')
+# method 4, horizontal bars
+ggplot(df, aes(x= reorder(df$Model,-df$value), df$value, fill=df$value)) + 
+  geom_bar(stat="identity") + coord_flip() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  labs(x='model', y='value')
 
 
 ### bubble plot 
