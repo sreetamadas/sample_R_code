@@ -1,0 +1,32 @@
+
+
+##############################################################
+######### NOTE : bounded & unbounded intervals #######
+
+fac <- cut(df$FracValue, c(5, 40, 80, 100, 500))
+=> (5,40] , (40, 80] , (80, 100] , (100,500]
+
+
+The interval of numbers between a and b, including a and b, is often denoted [a,?b].
+To indicate that one of the endpoints is to be excluded from the set, the corresponding square bracket can be either replaced with a parenthesis, or reversed. 
+Both notations are described in International standard ISO 31-11. Thus, in set builder notation,
+
+( a , b ) = ] a , b [ = { x ? R | a < x < b } , 
+[ a , b ) = [ a , b [ = { x ? R | a = x < b } , 
+( a , b ] = ] a , b ] = { x ? R | a < x = b } , 
+[ a , b ] = [ a , b ] = { x ? R | a = x = b } . 
+Note that (a,?a), [a,?a), and (a,?a] each represents the empty set, whereas [a,?a] denotes the set {a}. 
+When a > b, all four notations are usually taken to represent the empty set.
+
+
+##############################################################################################################################
+# in the code 'current-diff_separatePlots-by_powerLevelFactor.r', the upper interval was unbounded while the lower was bounded
+  # power above rated
+  prA <- subset(df, df$FracRatedPower >= L1)
+  #power_close_to_rated 
+  prC <- subset(df, (df$FracRatedPower >= L2) & (df$FracRatedPower < L1))
+  #power_medium_rating
+  prM <- subset(df, (df$FracRatedPower >= L3) & (df$FracRatedPower < L2))
+  #power_verylow_usage
+  prL <- subset(df, (df$FracRatedPower < L3) & (df$FracRatedPower >= L4))
+
