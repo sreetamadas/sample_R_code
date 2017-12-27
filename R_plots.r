@@ -59,6 +59,8 @@ cor(new)  # check correlation among the variables
 
 ### 2D scatter plot with transparency
 # method 1
+#library(clusterSim)  # may be reqd for rgb
+#attach(mtcars, warn.conflicts = FALSE)
 plot(df$x, df$y, col=rgb(0,100,0,50,maxColorValue=255), pch=16, xlab="X", ylab="Y") 
 
 # method 2 : (alpha sets the transparency)
