@@ -58,7 +58,16 @@ cor(new)  # check correlation among the variables
 
 
 ### 2D scatter plot with transparency
+# method 1
 plot(df$x, df$y, col=rgb(0,100,0,50,maxColorValue=255), pch=16, xlab="X", ylab="Y") 
+
+# method 2 : (alpha sets the transparency)
+Palette1 <- c('red','blue','violet','black')  # the 4 colours are for the 4 levels of 'fac' in the df
+library(ggplot2)
+ggplot(data=df, aes(df$ab, df$bc, color=fac)) + geom_point(alpha=0.3) +
+    labs(x="var A-B", y="var B-C") + scale_colour_manual(values=Palette1) + 
+    scale_colour_discrete(drop=TRUE, limits = levels(fac)) # + geom_line(size=0.01, col="blue")
+  
 
 
 ### 3D scatterplots ###
