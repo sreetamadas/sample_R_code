@@ -1,0 +1,28 @@
+# packages installed
+
+install.packages("ggplot2")
+install.packages("cowplot")
+install.packages("car")
+install.packages("rgl")
+install.packages("dplyr")
+install.packages("scatterplot3d")
+
+install.packages("clusterSim")
+
+install.packages("readxl")
+
+install.packages("jmotif")
+
+install.packages("vioplot")
+
+install.packages("plotrix")  < library(plotrix), color2d.matplot() >
+
+
+install.packages("zoom")  <library(zoom)>
+
+
+install.packages("fpp")
+
+install.packages("randomForest")
+install.packages("party")
+
