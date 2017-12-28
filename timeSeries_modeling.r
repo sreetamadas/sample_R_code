@@ -1,4 +1,5 @@
-## time series modeling
+####  TIME SERIES MODELING  #####
+## code needs to be updated
 
 setwd("C:/Users/Desktop/data/")
 
