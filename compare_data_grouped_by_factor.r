@@ -6,8 +6,9 @@
 new_df <- data.frame(as.character(levels(as.factor(df$ID))))
 colnames(new_df)[1] <- 'ID'
 total <- tapply(df$TotalPcs, df$ID, FUN=sum)     ## summing over cell values
-usage <- tapply(w_model$TotalProductPcs, w_model$Machine, function(x) length(x))    ## summing over instances/ no. of occurrences **
-new_df <- cbind(new_df, total, usage)
+usage <- tapply(df$TotalPcs, df$ID, function(x) length(x))    ## summing over instances/ no. of occurrences **
+median_pcsPerShift <- tapply(df$TotalPcs, df$ID, FUN=median)
+new_df <- cbind(new_df, total, usage, median_pcsPerShift)
 ## remove NA values
 new_df <- new_df[complete.cases(new_df),] 
 
