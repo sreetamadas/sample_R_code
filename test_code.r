@@ -1,6 +1,5 @@
 ##############################################################################################
 ### check NA values
-
 Are there any NA values in col?
 > any(is.na(df$sel_col))
 [1] TRUE
@@ -96,7 +95,6 @@ colnames(df) <- c("time","col1","col2","Y1","Y2")
 
 ###########################################################################
 ## binning data ###
-
 #fac <- cut(df$subset.Y, c(-10, 20, 50, 80, 110, 140, 170, 200, 230, 260),labels=c('1','2','3','4', '5','6','7','8','9')) # rename levels
 #fac <- cut(df$subset.Y, c(-10,20,40,60,80,100,120,140,160,180,200,220,240,260),labels=c(1:13)) # rename levels
 fac <- cut(df$subset.Y, breaks=seq(-10,260,by=10), labels=c(1:27))
@@ -107,11 +105,26 @@ df <- cbind(df,fac)
 fac2 <- cut(df$Y, c(-10, 5, 30, 60, 100, 500),labels=c('off','low','medium','high','veryHigh'))
 df <- cbind(df,fac2)
 
-##################################################################################################
+########################################################################################################
 ##### assign values to columns by factors ######
 df$score[df$fac2 == 'low'] <- 60
 
-#####################################################################################################
+#########################################################################################################
+## find factors values in a col, & save them i) in a new dataframe , ii) as list
+## method 1: as dataframe
+new_df <- data.frame(as.character(levels(as.factor(df$ID))))
+colnames(new_df)[1] <- 'ID'
+total <- tapply(df$TotalPcs, df$ID, FUN=sum)
+new_df <- cbind(new_df, total)
+## remove NA values
+new_df <- new_df[complete.cases(new_df),]             
+             
+
+## method 2: as list             
+idList <-  as.character(sort(unique(df$ID))) ## get unique IDs in column
+            
+             
+########################################################################################################
 ## calculate statistical parameters for data grouped by factors ###
 
 df <- data.frame(subset1$txtime, subset1$Y, subset1$xA, subset1$xB, subset1$xC)   
@@ -134,7 +147,6 @@ tmp_df <- cbind(tmp_df, sd_ab, max_ab, min_ab)
 df$date <- format(as.POSIXct(df$txtime, format="%Y-%m-%d %H:%M:%S"), format="%Y-%m-%d") # %H:%M:%S
 df$day <- as.POSIXlt(df$date)$wday
 df$day2 <- weekdays(as.Date(df$txtime))
-             
              
              
 ### calculate time differences ######
