@@ -1,6 +1,7 @@
 ############  IMBALANCE CALCULATION  #####################
 ## method 1: (Vmax - Vmin) < 4% of Vmin, where Vmax & Vmin are chosen from the 3 phase voltages at each time  ####
 ## http://ecmweb.com/content/basics-voltage-imbalance 
+## https://zenatix.com/current-and-voltage-unbalance-causes-and-counter-measures/
 df$minV=apply(df,1,function(x) min(x))
 df$maxV=apply(df,1,function(x) max(x))
 #df$diff_m1 <- (df$maxV - df$minV) * 100/(4 * df$minV)
