@@ -1,6 +1,27 @@
 ########################################################################################################
 ## develop model to predict Y, given the categorical variables x1, x2 & continuous variable x  ###
 ## use linear regression: Y = A + Bx
+
+## alternately, 
+## 1. try Y = A + Bx, where Y = log(y)
+## for this, transform the data before passing to 'lm' by; 
+##  w_mc$Y_new <- log(w_mc$Y)
+##  fit <- lm(w_mc$Y_new ~ w_mc$X, data=w_mc)
+
+## 2. try Y = A + BX, where Y = log(y), X = log(x)
+## for this, transform: w_mc$Y_new <- log(w_mc$Y)  ;  w_mc$X_new <- log(w_mc$X)
+
+## 3. try Y = A + BX, where Y & X have undergone Box-Cox transformation
+###  use the following lines of code in appropriate place  ###
+# Box-Cox transform
+# library(fpp)  
+# x_lambda <- BoxCox.lambda(w_mc$X)  # https://www.otexts.org/fpp/2/4
+# y_lambda <- BoxCox.lambda(w_mc$Y)
+
+# fit regression model
+# w_mc$Y_new <- BoxCox(w_mc$Y, y_lambda)
+# w_mc$X_new <- BoxCox(w_mc$X, x_lambda)
+# fit <- lm(w_mc$Y_new ~ w_mc$X_new, data=w_mc)
 ########################################################################################################
 
 ### read data 
@@ -20,7 +41,7 @@ w_model$colour[w_model$Shift == '3'] <- 'red'   # shift 3: 16:00 - 00:00
 x2List <-  as.character(sort(unique(w_model$x2))) ## get unique IDs in x2 column
 
 
-
+########  model building ###########
 for (mc in x2List) {
   w_mc <- subset(w_model, w_model$x2 == X2)
 
@@ -58,6 +79,9 @@ for (mc in x2List) {
   mtext(eq, side=3, line=0)
   ## printing r2
   mtext(bquote(r^2 == .(r2)),adj=1)
+  ## printing lambda (for Box-Cox transformation)
+  # mtext(paste('x_lambda: ',x_lambda,' y_lambda: ',y_lambda), side=3, line=1)
+  
   
   
   ## plot residuals
