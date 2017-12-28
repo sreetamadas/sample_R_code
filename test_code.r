@@ -130,8 +130,14 @@ tmp_df <- cbind(tmp_df, sd_ab, max_ab, min_ab)
 
 
 #######################################################################################################
+## assign day of week
+df$date <- format(as.POSIXct(df$txtime, format="%Y-%m-%d %H:%M:%S"), format="%Y-%m-%d") # %H:%M:%S
+df$day <- as.POSIXlt(df$date)$wday
+df$day2 <- weekdays(as.Date(df$txtime))
+             
+             
+             
 ### calculate time differences ######
-
 c_time <- as.POSIXlt(df$s15.txtime )
 timedel <- as.numeric(difftime(c_time[2:length(c_time)] , c_time[1:(length(c_time)-1)], tz = 'UTC')) #, units="mins")  
 ## (OR), timedel2 <- as.numeric(diff(df$s15.txtime))
