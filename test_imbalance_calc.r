@@ -1,4 +1,4 @@
-
+############  IMBALANCE CALCULATION  #####################
 ## method 1: (Vmax - Vmin) < 4% of Vmin, where Vmax & Vmin are chosen from the 3 phase voltages at each time  ####
 ## http://ecmweb.com/content/basics-voltage-imbalance 
 df$minV=apply(df,1,function(x) min(x))
@@ -26,3 +26,22 @@ tmp_df$maxDiff=apply(tmp_df,1,function(x) max(x))
 #df$diff_m3 <- tmp_df$maxDiff * 100/(2 * df$subset.Voltage)
 df$diff_m3 <- tmp_df$maxDiff * 100/(df$subset.Voltage)
   
+
+                     
+############################################################################   
+# calculate reactive power
+df1$apparentPower <- (df1$currentA*df1$voltageA + df1$currentB*df1$voltageB + df1$currentC*df1$voltageC)/1000
+df1$reactivePower <- sqrt(df1$apparentPower*df1$apparentPower - df1$realtimepower*df1$realtimepower)
+df1$ratio <- df1$realtimepower/df1$apparentPower
+
+fac2 <- cut(df1$FracRatedPower, c(-10, 0, 30, 80, 100, 500),labels=c('off', 'low','medium','high','veryHigh')) # rename levels
+df1 <- cbind(df1,fac2)
+
+vH1 <- subset(df1, df1$fac2 == 'veryHigh')
+h1 <- subset(df1, df1$fac2 == 'high')
+
+### impedance calculation
+vH1$impedanceA <- vH1$voltageA/vH1$currentA
+vH1$impedanceB <- vH1$voltageB/vH1$currentB
+vH1$impedanceC <- vH1$voltageC/vH1$currentC
+
