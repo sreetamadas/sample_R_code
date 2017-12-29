@@ -29,6 +29,18 @@ prC <- subset(df, (df$Y >= L2) & (df$Y < L1))		## using AND
 http://stackoverflow.com/questions/4935479/how-to-combine-multiple-conditions-to-subset-a-data-frame-using-or
 
 ########################################################################################################
+### using data table to subset data ###
+## for each value of X, subset data with the min. value of Y
+library(data.table)
+DT <- data.table(df)
+
+#select <- DT[ , .SD[which.min(Y)], by = X]  
+## alternately, keep multiple cases with same min value
+select2 <- DT[ , .SD[Y == min(Y)], by = X]
+## another alternate
+#select3c <- DT[DT[, .I[Y == min(Y)], by = X]$V1]
+
+########################################################################################################
 ## bind multiple data frame 
 dataset1 <- read.csv("C:/Users/Desktop/data/data1.csv")
 dataset2 <- read.csv("C:/Users/Desktop/data/data2.csv")   
