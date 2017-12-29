@@ -1,4 +1,4 @@
-## compare time-usage & total nos on different machines : using barplot & box-plot
+## 1. compare time-usage & total nos on different machines : using barplot & box-plot
 
 ## read data
 
@@ -19,7 +19,6 @@ ggplot(new_df, aes(new_df$ID, new_df$usage)) + geom_bar(stat="identity") +
       theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(x='', y='no. of shifts') +
       theme(axis.text=element_text(size=14), axis.title=element_text(size=16)) 
 
-
 # distribution of production
 h <-
 ggplot(df, aes(df$ID, df$TotalProductPcs)) + geom_boxplot(width=0.4, fill='gold') +
@@ -27,24 +26,34 @@ ggplot(df, aes(df$ID, df$TotalProductPcs)) + geom_boxplot(width=0.4, fill='gold'
   labs(x='machine', y='total Product (pcs)') + theme(axis.text=element_text(size=14), axis.title=element_text(size=16))  
 
 
-
 #####  **  alternate way of counting instances #########
-l0 <- subset(mc, mc$fac == '0')
-l10 <- subset(mc, mc$fac == '10')
 l30 <- subset(mc, mc$fac == '30')
 l50 <- subset(mc, mc$fac == '50')
-l70 <- subset(mc, mc$fac == '70')
-l90 <- subset(mc, mc$fac == '90')
-l110 <- subset(mc, mc$fac == '110')
-l130 <- subset(mc, mc$fac == '130')
-
+## etc ...
 
 ## count instances in each bin
-count_l0 <- nrow(l0) * 100/nrow(mc)
-count_l10 <- nrow(l10) * 100/nrow(mc)
 count_l30 <- nrow(l30) * 100/nrow(mc)
 count_l50 <- nrow(l50) * 100/nrow(mc)
-count_l70 <- nrow(l70) * 100/nrow(mc)
-count_l90 <- nrow(l90) * 100/nrow(mc)
-count_l110 <- nrow(l110) * 100/nrow(mc)
-count_l130 <- nrow(l130) * 100/nrow(mc)
+# etc ...
+                
+#################################################################################################
+## calculate cumultive sum by factor & sort by total
+           
+model_TotalProd <- data.frame(as.character(levels(as.factor(tmp$ModelNo))))
+colnames(model_TotalProd)[1] <- 'Model'
+totalProd <- tapply(tmp$TotalProductPcs, tmp$ModelNo, FUN=sum)
+model_TotalProd <- cbind(model_TotalProd, totalProd)
+### set NA to zero ######
+model_TotalProd$totalProd[is.na(model_TotalProd$totalProd)] <- 0
+
+### plot cumulative values (total what % do the top models contribute?)
+model_TotalProd$c <- model_TotalProd$totalProd * 100/sum(model_TotalProd$totalProd)    # calc %
+model_TotalProd <- model_TotalProd[with(model_TotalProd, order(-totalProd, Model)), ]  # sort by total production, descending order
+model_TotalProd$csum <- cumsum(model_TotalProd$c)      # calculate cumulative sum
+#  model_TotalProd$csum <- ave(model_TotalProd$totalProd, model_TotalProd$Model, FUN=cumsum) # this is giving cumsum fo each model, not useful here
+
+               
+                
+                
+                
+                
