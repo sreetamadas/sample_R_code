@@ -12,6 +12,17 @@ Which index has NA value?
 > which(is.na(df$sel_col))
 [1] 146308
 
+####################################################################################################
+## say, a dataframe has multiple values (taken at short intervals) of temp, pr etc per shift
+## create a new dataframe with averaged values for these parameters
+
+df_avg <- summaryBy(. ~ Date + Shift, FUN=c(mean, median, sd), data=df, na.rm=TRUE)   ## median affected by NA values
+
+######################################################################################################
+## combine dataframes
+dat <- merge(w_mc, df_avg, by = "DateTime")    # inner join
+#dat <- merge(w_mc, df_avg, by = "DateTime", all.x = TRUE)  # check left/right/outer/inner join
+
 
 #####################################################################################################
 ####### correlation among variables   ##############
@@ -129,7 +140,8 @@ df$score[df$fac2 == 'low'] <- 60
 new_df <- data.frame(as.character(levels(as.factor(df$ID))))
 colnames(new_df)[1] <- 'ID'
 total <- tapply(df$TotalPcs, df$ID, FUN=sum)
-new_df <- cbind(new_df, total)
+sd_T <- tapply(df$TotalPcs, df$ID, FUN=sd)  # sample FUN : sum, mean, median, sd
+new_df <- cbind(new_df, total, sd_T)
 ## remove NA values
 new_df <- new_df[complete.cases(new_df),]             
              
