@@ -67,6 +67,8 @@ for (file in file_list){
         rm(temp_dataset)
     }
 }
+num <- 1
+write.csv(dataset, paste('filenew',num,'_.csv'))
 
 #####################################################################################################
 ## calculate max & min in a row of data ##
