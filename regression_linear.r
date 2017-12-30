@@ -24,6 +24,21 @@
 # fit <- lm(w_mc$Y_new ~ w_mc$X_new, data=w_mc)
 ########################################################################################################
 
+# predicted r2
+pred_r_squared <- function(linear.model) {
+  lm.anova <- anova(linear.model)
+  tss <- sum(lm.anova$"Sum Sq")
+  # predictive R^2
+  pred.r.squared <- 1 - PRESS(linear.model)/(tss)
+  return(pred.r.squared)
+}
+PRESS <- function(linear.model) {
+  pr <- residuals(linear.model)/(1 - lm.influence(linear.model)$hat)
+  PRESS <- sum(pr^2)
+  return(PRESS)
+}
+############################################################################################################
+
 ### read data 
 prdcn <- read.csv("sample_data.csv")
 
@@ -49,6 +64,8 @@ for (mc in x2List) {
   fit <- lm(w_mc$Y ~ w_mc$X, data=w_mc)
   w_mc$y_predicted <- predict(fit, data=w_mc)
   #summary(fit)
+  # mse
+  #mse <- mean(sum((w_mc$Y - w_mc$y_predicted)*(w_mc$Y - w_mc$y_predicted)))
   
   
   ## plot for given x1 & x2
@@ -57,6 +74,12 @@ for (mc in x2List) {
   par(mfrow=c(1,2))
   plot(w_mc$X, w_mc$Y, xlab=paste('x (', X1, ')'), ylab='Y', col=w_mc$colour, lwd=2, pch=16, cex=0.8, cex.axis=2.5, cex.lab=2.5)
   legend("topright",legend=c("shift 1","shift 2", "shift 3"), fill=c("blue","green","red"), cex=1)
+  
+  
+  # show prediction intervals
+  pred.int =  predict(fit, interval="prediction", level=0.95)
+  lines(w_mc$X, pred.int[,2], col="blue", lty=2, lwd=1) 
+  lines(w_mc$X, pred.int[,3], col="blue", lty=2, lwd=1) 
   
   
   # show regression fit
@@ -83,10 +106,17 @@ for (mc in x2List) {
   # mtext(paste('x_lambda: ',x_lambda,' y_lambda: ',y_lambda), side=3, line=1)
   
   
-  
   ## plot residuals
   plot(resid(fit) ~ fitted(fit), cex.axis=2, cex.lab=2, xlab='fitted value', ylab='residual')
   abline(h=0, col="red")
+  
+  
+  ## residuals normality
+  library(car)
+  qqPlot(fit)
+  #layout(matrix(c(1,2,3,4),2,2))
+  #plot(fit)
+
   
   dev.off()
 }
