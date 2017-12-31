@@ -37,7 +37,7 @@ time <- as.Date(c('2017-01-01 08:00:00','2017-01-01 10:00:00','2017-01-02 09:00:
 df <- data.frame(time, X, Y, size)
 
 
-### scatter plot
+### scatter plot  ###
 # changing line width (lwd) & type (lty) =>  http://www.statmethods.net/advgraphs/parameters.html
 # method 1: line plot
 plot(as.POSIXct(df$time), df$y, type='l', lwd=0.5, xlab="time", ylab="var. Y", cex.axis=1.5, cex.lab=2) #, ylim=c(MIN,MAX))
@@ -57,7 +57,7 @@ pairs(new)  # plots the paired scatterplots
 cor(new)  # check correlation among the variables
 
 
-### 2D scatter plot with transparency
+### 2D scatter plot with transparency  ###
 # method 1
 #library(clusterSim)  # may be reqd for rgb
 #attach(mtcars, warn.conflicts = FALSE)
@@ -89,7 +89,7 @@ scatter3d(df$X, df$Y, df$size)
 
 
 
-### histogram & density plots
+### histogram & density plots ###
 # method 1
 hist(df$y, xlab="var. Y", breaks=seq(0,175,by=5), cex.main=1.5, cex.lab=1.5, cex.axis=1.5)  # changing label size
 # density plot
@@ -102,7 +102,7 @@ qplot(df$y, geom="histogram", binwidth=2, xlab="var.Y)")+
 qplot(df$y, geom="density", xlab="var.Y")
 
 
-### boxplot (comparison of variables X, Y, Z in dataframes l0, lL, lM, lH, lvH)
+### boxplot (comparison of variables X, Y, Z in dataframes l0, lL, lM, lH, lvH)  ###
 # method 1
 boxplot( l0$x, l0$y,  l0$z, 
          lL$x, lL$y, lL$z,
@@ -127,7 +127,7 @@ ggplot(tmp_df, aes(tmp_df$day_of_week, tmp_df$y)) +
 
 
 
-### violin plot (check bean plot: http://exploringdatablog.blogspot.in/2011/03/boxplots-beyond-iv-beanplots.html)
+### violin plot (check bean plot: http://exploringdatablog.blogspot.in/2011/03/boxplots-beyond-iv-beanplots.html) ###
 # method 1
 library(vioplot)
 vioplot(l0$x, l0$y,  l0$z, 
@@ -146,7 +146,7 @@ ggplot(tmp_df, aes(tmp_df$day_of_week, tmp_df$Y)) +
 
 
 
-### barplot
+### barplot  ###
 # make a vector of the values to be used as input to barplot
 bin = c(value_0, value_L, value_M, value_H, value_vH)
 # method 1: plot
@@ -180,7 +180,14 @@ ggplot(df, aes(x= reorder(df$Model,-df$value), df$value, fill=df$value)) +
   labs(x='model', y='value')
 
 
-### bubble plot 
+### stacked barchart  ###
+## create stacked bars for: multiple shifts data (for a continuous var.) on a date & for multiple categorical variables
+ggplot(data = df, aes(as.POSIXct(df$Date), df$continuous_var, colour=as.factor(df$categorical_var))) + 
+          geom_bar(stat="identity", aes(fill=as.factor(df$categorical_var))) + scale_fill_brewer(palette = 12)
+
+
+
+### bubble plot ###
 symbols(df$X, df$Y, circles=df$size)
 radius <- sqrt( df$size/ pi )
 symbols(df$X, df$Y, circles=radius)
@@ -188,14 +195,14 @@ symbols(df$X, df$Y, circles=radius)
 symbols(df$X, df$Y, circles=radius, bg=as.numeric(df$size), xlab= "bin", ylab= "SD")
 
 
-### plot a matrix z by color
+### plot a matrix z by color ###
 library(plotrix)
 attach(mtcars, warn.conflicts = FALSE)
 color2D.matplot(z,c(1,0),c(0,1),c(0,0), show.legend=FALSE,xlab="Column",ylab="Row",do.hex=FALSE,axes=TRUE,show.values=FALSE) 
 # black-green: c(0,0),c(0,1),c(0,0); white-black: c(1,0),c(1,0),c(1,0); white-green: c(1,0),c(1,1),c(1,0) [low - high scales]
 
 
-## plot heatmap
+## plot heatmap ###
 # method 1 : mat
 library(corrplot)
 corrplot(t(mat),is.corr = FALSE, method='square')
@@ -274,6 +281,15 @@ ggplot(data = df, aes(x = df$x, y = df$y,
 
 # method 4: if using plot() and coloring by factors, use type='b' and not lineplot i.e. type='l'
 ### changing line width (lwd) & type (lty) =>  http://www.statmethods.net/advgraphs/parameters.html
+
+
+# method 5: using direct label
+library(directlabels)
+library(ggplot2)
+ggplot(x, aes(x$DateTime, x$continuous_var, group = x$categorical_var, colour=as.factor(x$categorical_var))) + 
+    geom_line() + geom_point() + 
+    geom_dl(aes(label = x$categorical_var), method = list(dl.combine("first.points", "last.points"), cex = 2))
+
 
 ##########################################################
 ## Dual axis plot 
