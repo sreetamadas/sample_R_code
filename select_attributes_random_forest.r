@@ -11,7 +11,8 @@ m1$class[m1$Y > 60.8] <- 'H'
 m1$class <- as.factor(m1$class)
 
 
-## using random forest  
+## using random forest 
+#randomForest_R does not take more than 52 values of a categorical variable
 library(randomForest)
 fmla <- as.formula(paste("class ~ ", paste(colnames(m1)[16:(ncol(m1)-1)], collapse='+')))
 fit <- randomForest(fmla, m1, ntree=10)
