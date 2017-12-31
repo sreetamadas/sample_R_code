@@ -64,4 +64,4 @@ summary(rtree)
 # ?rpart # split can be using information or GINI
 
 
-
+## if the variable to be predicted is continuous, then the RF implementation is called regression forest
