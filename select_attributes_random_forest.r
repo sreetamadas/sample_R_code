@@ -25,6 +25,9 @@ plot(fit_forest)
 varImpPlot(fit_forest, sort = T, main="Variable Importance", n.var=10)
 fit_forest$importance
 
+## get kth tree from the random forest
+# getTree(randomForest(fmlaT1, data=d, ntree=1000), k=1, labelVar = TRUE)
+
 
 library(party)
 ## 1st var
