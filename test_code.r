@@ -32,17 +32,35 @@ library(corrplot)
 corrplot(cor(numeric_data),type="lower", method="color", tl.cex=0.6, cl.cex=0.8)
 
 
-##########################################################################
-### combine multiple conditions into a data frame
+##########################################################################################################
+### PCA ###
+t <- d[,c(5,14:ncol(d))]     # take numeric columns only, not factors
+
+#t <- t[, colSums(t != 0) > 0]    # remove columns with only zeroes
+t <- t[,apply(t, 2, var, na.rm=TRUE) != 0]  # remove columns with constant, variance = 0
+#t <- t[,sapply(t, function(v) var(v, na.rm=TRUE)!=0)]
+
+#str(t)  # shows types of data in different columns
+
+m.pca <- prcomp(t, center = TRUE, scale. = TRUE)   # take PCA
+#print(m.pca)
+plot(m.pca, type='l')
+plot(m.pca$x[,1:2],)
+summary(m.pca)
+
+
+###########################################################################################################
+### combine multiple conditions into a data frame / subsetting data
 # http://stackoverflow.com/questions/4935479/how-to-combine-multiple-conditions-to-subset-a-data-frame-using-or
 
-my.data.frame <- subset(data , V1 > 2 | V2 < 4)
-my.data.frame <- data[(data$V1 > 2) | (data$V2 < 4), ]	## using OR
+my.df <- subset(data , V1 > 2 | V2 < 4)
+my.df <- data[(data$V1 > 2) | (data$V2 < 4), ]	## using OR
 
-prC <- subset(df, (df$Y >= L2) & (df$Y < L1))		## using AND
+new_df <- subset(df, (df$Y >= L2) & (df$Y < L1))		## using AND
 
 df <- subset(dat, subset = df$cat_X %in% c('M01','M02','M03','M04','M05') & df$Y == 'K' )
 
+new_df <- df[,c(5,14:ncol(df))]     # take selected columns by column no.
 
 ########################################################################################################
 ### using data table to subset data ###
