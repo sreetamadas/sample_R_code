@@ -32,12 +32,15 @@ cor(sensor111data)           # calculate corr
 
 ##########################################################################
 ### combine multiple conditions into a data frame
+# http://stackoverflow.com/questions/4935479/how-to-combine-multiple-conditions-to-subset-a-data-frame-using-or
 
 my.data.frame <- subset(data , V1 > 2 | V2 < 4)
 my.data.frame <- data[(data$V1 > 2) | (data$V2 < 4), ]	## using OR
+
 prC <- subset(df, (df$Y >= L2) & (df$Y < L1))		## using AND
 
-http://stackoverflow.com/questions/4935479/how-to-combine-multiple-conditions-to-subset-a-data-frame-using-or
+df <- subset(dat, subset = df$cat_X %in% c('M01','M02','M03','M04','M05') & df$Y == 'K' )
+
 
 ########################################################################################################
 ### using data table to subset data ###
