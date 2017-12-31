@@ -19,6 +19,20 @@ Which index has NA value?
 df_avg <- summaryBy(. ~ Date + Shift, FUN=c(mean, median, sd), data=df, na.rm=TRUE)   ## median affected by NA values
 
 ######################################################################################################
+## calculate new col based on condition
+
+# NAs introduced by coercion since the numerator & denominator are blank for some rows
+# so use the if-else condition
+for (i in 1:nrow((prdf))) {
+  if(prdf$x[i] == 0) {
+    prdf$y[i] <- 0
+  }
+  else{
+    prdf$y[i] <- as.numeric(as.character(prdf$y[i]))/prdf$x[i]
+  }
+}
+
+######################################################################################################
 ## combine dataframes
 dat <- merge(w_mc, df_avg, by = "DateTime")    # inner join
 #dat <- merge(w_mc, df_avg, by = "DateTime", all.x = TRUE)  # check left/right/outer/inner join
