@@ -37,6 +37,17 @@ time <- as.Date(c('2017-01-01 08:00:00','2017-01-01 10:00:00','2017-01-02 09:00:
 df <- data.frame(time, X, Y, size)
 
 
+#############################################################################################
+## plot multiple variables vs time from a dataframe  ###
+
+for(i in 4:ncol(df)) {
+  png(paste('param_',i,'.png') ,h=500, w=600)
+  print(plot(as.POSIXct(df$Time, format="%Y-%m-%d %H:%M:%S"), df[,i], type='b'))
+  dev.off()
+}
+
+
+###############################################################################################
 ### scatter plot  ###
 # changing line width (lwd) & type (lty) =>  http://www.statmethods.net/advgraphs/parameters.html
 # method 1: line plot
