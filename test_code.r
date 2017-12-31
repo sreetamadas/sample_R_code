@@ -27,7 +27,9 @@ dat <- merge(w_mc, df_avg, by = "DateTime")    # inner join
 #####################################################################################################
 ####### correlation among variables   ##############
 numeric_data <- data[,4:17]  # create new df with only the numeric columns
-cor(sensor111data)           # calculate corr
+cor(numeric_data)           # calculate corr
+library(corrplot)
+corrplot(cor(numeric_data),type="lower", method="color", tl.cex=0.6, cl.cex=0.8)
 
 
 ##########################################################################
