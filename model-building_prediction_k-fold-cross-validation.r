@@ -37,31 +37,9 @@ dTest       <- d[indicesTest, ]
 
 
 #######################################################################################################
-#fmla <- as.formula(paste("kWh_per_piece ~ ", paste(c(colnames(d)[4],colnames(d)[14:(ncol(d)-1)]), collapse='+')))
-# no. of pieces, water temp
-fmlaT <- as.formula(paste("kWh_per_piece ~ ", paste(c(colnames(d)[5],colnames(d)[16]), collapse='+')))
-
-
 ######  build using training set, optimize using validation set, finally, test on training set  #####
 
-fit <- randomForest(fmlaT, data=dTraining, ntree=501)  # ntree = 250 or 500
-prediction <- predict(fit, newdata=dValidation)
-library(miscTools)
-r2 <- rSquared(dValidation$kWh_per_piece, dValidation$kWh_per_piece - predict(fit, newdata=dValidation))
-# or, R2 = 1 - sum((y-predicted)^2)/sum((y-mean(y))^2)
-# 1 - sum((dValidation$kWh_per_piece-predict(kWh_forest, newdata=dValidation))^2)/sum((dValidation$kWh_per_piece-mean(dValidation$kWh_per_piece))^2)
-mse <- mean((dValidation$kWh_per_piece - predict(fit, newdata=dValidation))^2)
-# fit
-# summary(fit)
-# getTree(randomForest(fmlaT1, data=d, ntree=1000), k=1, labelVar = TRUE)
-
-library(ggplot2)
-ggplot(data=data.frame(actual=dValidation$kWh_per_piece, pred=prediction), aes(x=actual, y=pred)) +
-  geom_point() + geom_abline(color="red")
-
-#plot(kWh_forest)
-#varImpPlot(kWh_forest, sort = T, main=paste("Variable Importance, ntree=",kWh_forest$ntree, sep =' '), n.var=25)
-
+fmlaT <- as.formula(paste("Y ~ ", paste(c(colnames(d)[5],colnames(d)[16]), collapse='+')))
 
 #######   partitioning the data for K-fold cross-validation   ###########
 
@@ -86,25 +64,29 @@ for (i in 1:k) {
   #fit <- randomForest(x=cv_train[,-1], y=as.factor(cv_train[,1]))
   fit <- randomForest(fmla, cv_train, ntree=501, importance=T) 
   #fit <- svm(fmla, cv_train, type="nu-regression", kernel="radial")
-  # fit <- lm(kWh_per_piece ~ TotalProductPcs + WATER.TEMP., cv_train)
+  # fit <- lm(Y ~ x1 + x2, cv_train)
   
   # predict using model
   # prediction <- (fit, newdata=cv_test[,-1], type="prob")[,2]   ## use for classification problem
   prediction <- predict(fit, newdata=cv_test)  ## use for random forest regression
   
   # calculate model accuracy for i-th fold
+  # for Classification
   #err.vect[i] <- roc.area(cv_test[,1], prediction)$A  ## use for classification; cv_test[,1] = cv_test$class
   #print(paste("AUC for fold ",i,":", err.vect[i]))    ## use for classification
-  # r-squared
-  r2 <- 1 - sum((cv_test$kWh_per_piece - predict(fit, newdata=cv_test))^2)/sum((cv_test$kWh_per_piece - mean(cv_test$kWh_per_piece))^2)
-  r2_train <- 1 - sum((cv_train$kWh_per_piece - predict(fit, data=cv_train))^2)/sum((cv_train$kWh_per_piece - mean(cv_train$kWh_per_piece))^2)
+  # r-squared, for regression : R2 = 1 - sum((y-predicted)^2)/sum((y-mean(y))^2)
+  #library(miscTools)
+  #r2 <- rSquared(dValidation$Y, dValidation$Y - predict(fit, newdata=dValidation))
+  r2 <- 1 - sum((cv_test$Y - predict(fit, newdata=cv_test))^2)/sum((cv_test$Y - mean(cv_test$Y))^2)
+  r2_train <- 1 - sum((cv_train$Y - predict(fit, data=cv_train))^2)/sum((cv_train$Y - mean(cv_train$Y))^2)
 
   # MSE
-  err.vect[i] <- mean((cv_test$kWh_per_piece - predict(fit, newdata=cv_test))^2)
-  mse <- mean((cv_train$kWh_per_piece - predict(fit, data=cv_train))^2)
+  err.vect[i] <- mean((cv_test$Y - predict(fit, newdata=cv_test))^2)  # error on test set
+  mse <- mean((cv_train$Y - predict(fit, data=cv_train))^2)    # error on training set
+  
   print(paste("fold ",i,", MSE (test):", err.vect[i],", r2 (test):", r2,", MSE <train>: ",mse,", r2 <train>; ",r2_train)) 
   varImpPlot(fit, sort = T, main=paste("Variable Importance, ntree=",fit$ntree,", fold=",i, sep =' '), n.var=15)
-  #plot(cv_test$kWh_per_piece, predict(fit, newdata=cv_test), xlab='kWh/pc (test)', ylab=paste('KPI predicted, fold ',i))
+  #plot(cv_test$Y, predict(fit, newdata=cv_test), xlab='Y (test)', ylab=paste('Y predicted, fold ',i))
   #abline(a=0, b=1, col='red')
 }
 
@@ -112,37 +94,19 @@ for (i in 1:k) {
 print(paste("avg MSE: ", mean(err.vect)))     ## use for regression
 
 
-########################################  END #####################################################
+########################################  END  #####################################################
 
-dTraining$class[dTraining$kWh_per_piece < 2.2] <- 'L'
-dTraining$class[dTraining$kWh_per_piece >= 2.2 & dTraining$kWh_per_piece <= 2.6] <- 'M'
-dTraining$class[dTraining$kWh_per_piece > 2.6] <- 'H'
+dTraining$class[dTraining$Y < 2.2] <- 'L'
+dTraining$class[dTraining$Y >= 2.2 & dTraining$Y <= 2.6] <- 'M'
+dTraining$class[dTraining$Y > 2.6] <- 'H'
 
-dTest$class[dTest$kWh_per_piece < 2.2] <- 'L'
-dTest$class[dTest$kWh_per_piece >= 2.2 & dTest$kWh_per_piece <= 2.6] <- 'M'
-dTest$class[dTest$kWh_per_piece > 2.6] <- 'H'
+dTest$class[dTest$Y < 2.2] <- 'L'
+dTest$class[dTest$Y >= 2.2 & dTest$Y <= 2.6] <- 'M'
+dTest$class[dTest$Y > 2.6] <- 'H'
 
 ####################################################################################################
 ####################################################################################################
 
-kWh_forest <- randomForest(fmla, dTraining, ntree=251, importance=T)
-plot(kWh_forest)
-varImpPlot(kWh_forest, sort = T, main=paste("Variable Importance, ntree=",kWh_forest$ntree, sep =' '), n.var=25)
-mean((dValidation$kWh_per_piece - predict(kWh_forest, newdata=dValidation))^2)
-kwh_forest251 <- kWh_forest
+## get 1 tree from the random forest
+# getTree(randomForest(fmlaT1, data=d, ntree=1000), k=1, labelVar = TRUE)
 
-######################################################################################################
-#####################################################################################################
-#####################################################################################################
-### different combinations of features for random forest  ####
-# no. of pieces, air 9 flow ACT
-# fmlaT4 <- as.formula(paste("kWh_per_piece ~ ", paste(c(colnames(d)[5],colnames(d)[47]), collapse='+')))
-
-# no. of pieces, water temp, air 9 flow ACT
-#fmlaT1 <- as.formula(paste("kWh_per_piece ~ ", paste(c(colnames(d)[5],colnames(d)[16], colnames(d)[47]), collapse='+')))
-
-# no. of pieces, water temp, air 9 flow ACT, air 1 flow ACT
-#fmlaT2 <- as.formula(paste("kWh_per_piece ~ ", paste(c(colnames(d)[5],colnames(d)[16],colnames(d)[47],colnames(d)[31]), collapse='+')))
-
-# no. of pieces, water temp, air 9 flow ACT, air 1 flow ACT, air 9 cooling time
-#fmlaT3 <- as.formula(paste("kWh_per_piece ~ ", paste(c(colnames(d)[5],colnames(d)[16],colnames(d)[47],colnames(d)[31],colnames(d)[48]), collapse='+')))
