@@ -1,4 +1,6 @@
 ####  TIME SERIES MODELING  #####
+# how to take care of missing data ?
+# how/ when to smooth data? use of filters?
 ## code needs to be updated
 
 setwd("C:/Users/Desktop/data/")
@@ -49,6 +51,22 @@ tsdisplay(x, plot.type = "scatter")
 lag.plot(x, lags=30, do.lines = FALSE)
 
 
+## creating differenced data
+library(astsa)
+xlag1=lag(x,-1)
+y=cbind(x,xlag1)
+#plot(y[,1], y[,2])
+
+
+# calculating differences
+library(astsa)
+diff1=diff(x, 1)
+plot(diff1)
+
+
+### sarima(df$X, 1,0,0,0,1,1,7)
+# sarima(diff1, 1,0,0,0,1,1,12)
+
 
 ## using periodogram to find dominant frequency
 library(TSA)
@@ -63,7 +81,6 @@ top2 = head(order, 2)
 # tsa in R
 # interpretation of frequency values in a periodogram in R
 # http://www.di.fc.ul.pt/~jpn/r/fourier/fourier.html
-
 
 ## data filtering:
 # google: how to apply high pass filter in R
