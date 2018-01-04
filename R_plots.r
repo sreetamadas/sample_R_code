@@ -135,6 +135,11 @@ ggplot(tmp_df, aes(tmp_df$day_of_week, tmp_df$y)) +
   labs(x='day', y='Y') + 
   theme(axis.text=element_text(size=14), axis.title=element_text(size=16))  + 
   coord_cartesian(ylim=c(0,100)) # used to zoom into a selected section
+## show number of data points in the box-plot
+f <- function(y) 
+     c(label=length(y), y=median(y))
+ggplot(tmp, aes(tmp$categorical, tmp$Y)) + geom_boxplot(width=0.4, fill='green') +
+      stat_summary(fun.data=f, geom="text", vjust=-0.5, col="blue")
 
 
 
@@ -154,6 +159,11 @@ ggplot(tmp_df, aes(tmp_df$day_of_week, tmp_df$Y)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   labs(x='', y='Y') + 
   theme(axis.text=element_text(size=14), axis.title=element_text(size=16)) 
+## show number of data points in the box-plot
+f <- function(y) 
+     c(label=length(y), y=median(y))
+ggplot(tmp, aes(tmp$categorical, tmp$Y)) +  geom_violin(scale="count", trim=FALSE, draw_quantiles = c(0.25, 0.5, 0.75)) +
+      stat_summary(fun.data=f, geom="text", vjust=-0.5, col="blue")
 
 
 
