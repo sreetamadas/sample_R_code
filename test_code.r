@@ -154,6 +154,7 @@ Y_z   <- data.Normalization(subset$Y,type="n1",normalization="column")
 ######## rename column of dataframe  #########
 colnames(tmp_df)[1] <- "time"
 colnames(df) <- c("time","col1","col2","Y1","Y2")
+names(df)[names(df) == "oldColumnName"] <- "NewColumnName"
 
 ###########################################################################
 ## binning data ###
