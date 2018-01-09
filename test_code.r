@@ -178,6 +178,7 @@ new_df <- data.frame(as.character(levels(as.factor(df$ID))))
 colnames(new_df)[1] <- 'ID'
 total <- tapply(df$TotalPcs, df$ID, FUN=sum)
 sd_T <- tapply(df$TotalPcs, df$ID, FUN=sd)  # sample FUN : sum, mean, median, sd
+num_of_instances <- tapply(df$someVariable, df$ID, function(x) length(unique(x))) # count no. of occurrences of each ID
 new_df <- cbind(new_df, total, sd_T)
 ## remove NA values
 new_df <- new_df[complete.cases(new_df),]             
