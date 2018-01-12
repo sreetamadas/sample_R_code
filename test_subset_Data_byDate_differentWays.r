@@ -10,6 +10,13 @@ Date2 <- paste("2016-12-", (dateofmonth + interval - 1), ' 06:00:00', sep = '')
 Date1 <- as.integer(as.POSIXct(Date1, tz = 'UTC')) 
 Date2 <- as.integer(as.POSIXct(Date2, tz = 'UTC'))
 s1 <- subset(s10, (as.integer(as.POSIXct(s10$txtime)) >= Date1 & as.integer(as.POSIXct(s10$txtime)) < Date2))
+
+### OR
+start <- paste(w_mc[j,]$Date,'00:00:00', sep = ' ')  # selecting date from a specific row of dataframe named w_mc
+end <- paste(w_mc[j,]$Date,'08:00:00', sep = ' ')
+s <- subset(df, as.integer(as.POSIXct(df$DateTime)) >= as.integer(as.POSIXct(start, tz = 'UTC')) 
+                  & as.integer(as.POSIXct(df$DateTime)) < as.integer(as.POSIXct(end, tz = 'UTC'))  )
+
   
 
 ######################################################################################
