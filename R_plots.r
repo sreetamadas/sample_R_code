@@ -84,14 +84,21 @@ ggplot(data=df, aes(df$ab, df$bc, color=fac)) + geom_point(alpha=0.3) +
 ### 3D scatterplots ###
 # method 1
 library(scatterplot3d)
-scatterplot3d(df$X, df$Y, df$size)
+scatterplot3d(df$X, df$Y, df$size, col=df$color, pch=as.numeric(df$shape), angle=50) # both color & shape (pch) can be changed; 
+# angle: to change viewing angle 
+# adding grid & legend
+source('http://www.sthda.com/sthda/RDoc/functions/addgrids3d.r')
+addgrids3d(df$X, df$Y, df$size, grid = c("xy", "xz", "yz"), angle=50)
+legend('right',legend = c('ID 1','ID 2','ID 3','ID 4' ), pch=c(1,2,3,4))
+#http://www.sthda.com/english/wiki/scatterplot3d-3d-graphics-r-software-and-data-visualization
+
 # method 2
 library(rgl)
 plot3d(df$X, df$Y, df$size)
 #     method 2, with colours changed
 df$colour[df$size < 500] <- 1
 df$colour[df$size >= 500] <- 2
-plot3d(df$X, df$Y, df$size, col=as.numeric(df$colour))
+plot3d(df$X, df$Y, df$size, col=as.numeric(df$colour))  # only color of points can be changed 
 #      method 2, with text labels added
 with(df, plot3d(df$X, df$Y, df$size, col=as.numeric(df$colour)))
 with(df, text3d('X', 'Y', 'size'))
