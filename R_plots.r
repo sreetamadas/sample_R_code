@@ -12,7 +12,8 @@ attach(mtcars, warn.conflicts = FALSE)
 par(mfrow=c(3,2))  # no. of rows, no. of col : this creates 6 figs
 par(mar=c(5,4.5,2,1)) # sets the bottom, left, top and right margins respectively of the plot region in number of lines of text
 #layout(matrix(c(1,2,2,2,3,3), 1, 6, byrow = TRUE))
-plot(df$time, df$x) 
+plot(df$time, df$x) ## color & shape of points can be changed
+# http://www.sthda.com/english/wiki/r-plot-pch-symbols-the-different-point-shapes-available-in-r
 # etc figs ...
 dev.off()
 
