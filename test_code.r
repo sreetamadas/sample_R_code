@@ -210,8 +210,8 @@ tmp_df <- cbind(tmp_df, sd_ab, max_ab, min_ab)
 #######################################################################################################
 ## assign day of week
 df$date <- format(as.POSIXct(df$txtime, format="%Y-%m-%d %H:%M:%S"), format="%Y-%m-%d") # %H:%M:%S
-df$day <- as.POSIXlt(df$date)$wday
-df$day2 <- weekdays(as.Date(df$txtime))
+df$day <- as.POSIXlt(df$date)$wday  # as number; sunday -> 0, Monday -> 1 & so on
+df$day2 <- weekdays(as.Date(df$txtime))  # as text, ie, by name
              
              
 ### calculate time differences ######
