@@ -12,6 +12,40 @@ Which index has NA value?
 > which(is.na(df$sel_col))
 [1] 146308
 
+
+#####################################################################################################
+## calculate max & min in a row of data ##
+
+1. create a dataframe with the columns (from each row) which should be included in the calculation
+2. run the following code on it
+
+df <- data.frame(subset$XA, subset$XB, subset$XC)	# creating data frame
+df$min=apply(df,1,function(x) min(x))				      # select min in the row
+df$max=apply(df,1,function(x) max(x))				      # select max in the row
+df$diff <- 0.04*df$min - (df$max - df$min)				# calculation on selected data
+
+#######################################################################################################
+#########  calculate max & min along column  ########
+> min(vh$A)
+[1] 201.01
+> max(vh$A)  
+[1] 264.59
+> sd(vh$A)
+[1] 13.23705
+> mean(vh$A)
+[1] 230.304
+
+max(df$y, na.rm=T)
+sort(df$y, decreasing = TRUE)
+
+####################################################################################################
+## append data to a list
+# at the beginning
+df <- append(0,df)             
+
+# at the end
+df <- append(df,0)             
+
 ####################################################################################################
 ## say, a dataframe has multiple values (taken at short intervals) of temp, pr etc per shift
 ## create a new dataframe with averaged values for these parameters
@@ -19,6 +53,14 @@ Which index has NA value?
 df_avg <- summaryBy(. ~ Date + Shift, FUN=c(mean, median, sd), data=df, na.rm=TRUE)   ## median affected by NA values
 
 ######################################################################################################
+             
+## combine dataframes
+dat <- merge(w_mc, df_avg, by = "DateTime")    # inner join
+#dat <- merge(w_mc, df_avg, by = "DateTime", all.x = TRUE)  # check left/right/outer/inner join
+#sel_dat <- merge(sel_dat, tmp, by.x='dateTime', all.x = TRUE, all.y = TRUE)
+
+######################################################################################################
+             
 ## calculate new col based on condition
 
 # NAs introduced by coercion since the numerator & denominator are blank for some rows
@@ -32,19 +74,12 @@ for (i in 1:nrow((prdf))) {
   }
 }
 
-######################################################################################################
-## combine dataframes
-dat <- merge(w_mc, df_avg, by = "DateTime")    # inner join
-#dat <- merge(w_mc, df_avg, by = "DateTime", all.x = TRUE)  # check left/right/outer/inner join
-
-
 #####################################################################################################
 ####### correlation among variables   ##############
 numeric_data <- data[,4:17]  # create new df with only the numeric columns
 cor(numeric_data)           # calculate corr
 library(corrplot)
 corrplot(cor(numeric_data),type="lower", method="color", tl.cex=0.6, cl.cex=0.8)
-
 
 ##########################################################################################################
 ### PCA ###
@@ -62,8 +97,15 @@ plot(m.pca, type='l')
 plot(m.pca$x[,1:2],)
 summary(m.pca)
 
+#####################################################################################################
+###  normalize data  ############
+
+subset=s110[strftime(s110$txtime,'%d',tz = 'UTC')== dateofmonth,]
+library(clusterSim)
+Y_z   <- data.Normalization(subset$Y,type="n1",normalization="column")
 
 ###########################################################################################################
+             
 ### combine multiple conditions into a data frame / subsetting data
 # http://stackoverflow.com/questions/4935479/how-to-combine-multiple-conditions-to-subset-a-data-frame-using-or
 
@@ -77,6 +119,7 @@ df <- subset(dat, subset = df$cat_X %in% c('M01','M02','M03','M04','M05') & df$Y
 new_df <- df[,c(5,14:ncol(df))]     # take selected columns by column no.
 
 ########################################################################################################
+             
 ### using data table to subset data ###
 ## for each value of X, subset data with the min. value of Y
 library(data.table)
@@ -116,47 +159,29 @@ for (file in file_list){
     }
 }
 num <- 1
-write.csv(dataset, paste('filenew',num,'_.csv'))
-
-#####################################################################################################
-## calculate max & min in a row of data ##
-
-1. create a dataframe with the columns (from each row) which should be included in the calculation
-2. run the following code on it
-
-df <- data.frame(subset$XA, subset$XB, subset$XC)	# creating data frame
-df$min=apply(df,1,function(x) min(x))				      # select min in the row
-df$max=apply(df,1,function(x) max(x))				      # select max in the row
-df$diff <- 0.04*df$min - (df$max - df$min)				# calculation on selected data
-
-#######################################################################################################
-#########  calculate max & min along column  ########
-> min(vh$A)
-[1] 201.01
-> max(vh$A)  
-[1] 264.59
-> sd(vh$A)
-[1] 13.23705
-> mean(vh$A)
-[1] 230.304
-
-max(df$y, na.rm=T)
-sort(df$y, decreasing = TRUE)
-               
-#####################################################################################################
-###  normalize data  ############
-
-subset=s110[strftime(s110$txtime,'%d',tz = 'UTC')== dateofmonth,]
-library(clusterSim)
-Y_z   <- data.Normalization(subset$Y,type="n1",normalization="column")
+write.csv(dataset, paste('filenew',num,'_.csv'))               
 
 ###################################################################################################
 ######## rename column of dataframe  #########
+             
 colnames(tmp_df)[1] <- "time"
 colnames(df) <- c("time","col1","col2","Y1","Y2")
 names(df)[names(df) == "oldColumnName"] <- "NewColumnName"
+             
+             
+### remove columns of a dataframe
+df$col_to_remove <- NULL
+df <- df[ , !names(df) %in% c("col1","col2","col3","col5")] ## works as expected
+              
 
 ###########################################################################
+             
+## fill in rows corresponding to added timestamps
+#library(padr)  pad(a)
+df <- na.locf(df, fromLast = TRUE)
+              
+###################################################################################
+             
 ## binning data ###
 #fac <- cut(df$subset.Y, c(-10, 20, 50, 80, 110, 140, 170, 200, 230, 260),labels=c('1','2','3','4', '5','6','7','8','9')) # rename levels
 #fac <- cut(df$subset.Y, c(-10,20,40,60,80,100,120,140,160,180,200,220,240,260),labels=c(1:13)) # rename levels
@@ -188,7 +213,12 @@ new_df <- new_df[complete.cases(new_df),]
 ## method 2: as list             
 idList <-  as.character(sort(unique(df$ID))) ## get unique IDs in column
             
-             
+## method 3:
+## finding unique entries
+library(sqldf)
+array_name = sqldf("select DISTINCT sno as 'sensor ID' from dat")
+                          
+                           
 ########################################################################################################
 ## calculate statistical parameters for data grouped by factors ###
 
@@ -230,5 +260,47 @@ df <- df[-nrow(df),]   ## remove last row of data, corrs to which there is no ti
 df <- cbind(df,timedel)  ## add the time differences column to the dataframe
 
 
-
-
+### split the ts column into date & time
+dat$date <- substring(dat$ts, 1, 10)
+dat$time <- substring(dat$ts, 12, 19)
+                           
+                           
+### adding time interval to a given time stamp
+dat$dateTime <- as.POSIXct(dat$dateTime, format="%Y-%m-%d %H:%M:%S") + 5*60*60 + 30*60  ### add 5 hours 30 min
+                           
+             
+##################################################################################################
+                           
+## check no. of repeats                           
+library(plyr)
+sel_dat <- join(sel_dat, count(sel_dat, "dateTime"))
+             
+                           
+                           
+## techniques to remove repeats
+# for repeats, do either of i, ii or iii
+#   i. single entry in each 1-min interval
+sel_dat = sel_dat[with(sel_dat, c(ts[-1]!= ts[-nrow(sel_dat)], TRUE)),]
+  
+#  ii. unique entries (1 -> 0) & (0 -> 1) in each 1-min interval 
+sel_dat$chk_col <- paste(as.numeric(as.POSIXct(paste(sel_dat$date, sel_dat$time, sep = ' '))), sel_dat$from, sel_dat$to, sep ='') 
+sel_dat <- sel_dat[with(sel_dat, order(chk_col)), ] #sel_dat <- sel_dat[order(chk_col),]
+sel_dat = sel_dat[with(sel_dat, c(chk_col[-1]!= chk_col[-nrow(sel_dat)], TRUE)),]
+  
+# iii. remove only adjacent duplicates
+# for this, create a column combining date, from & to
+sel_dat$chk_col <- paste(as.numeric(as.POSIXct(paste(sel_dat$date, sel_dat$time, sep = ' '))), sel_dat$from, sel_dat$to, sep ='') 
+# remove adjacent duplicates
+# https://stackoverflow.com/questions/27022057/removing-only-adjacent-duplicates-in-data-frame-in-r
+sel_dat = sel_dat[with(sel_dat, c(chk_col[-1]!= chk_col[-nrow(sel_dat)], TRUE)),]
+                           
+                           
+                           
+### for multiple entries in a minute, reassign the time (seconds value)
+#sel_dat$new[] <- 
+sel_dat$new <- unlist(sapply(unique(sel_dat$dateTime), function(x) {
+    freq <- sum(x == sel_dat$dateTime)
+    as.character(seq(as.POSIXct(x), by = 60/freq, length.out = freq))  #(new, by=freq, length.out=freq)
+  }))
+                           
+                           
