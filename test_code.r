@@ -193,7 +193,9 @@ df <- cbind(df,fac)
 fac2 <- cut(df$Y, c(-10, 5, 30, 60, 100, 500),labels=c('off','low','medium','high','veryHigh'))
 df <- cbind(df,fac2)
 
-########################################################################################################
+new_factor <- factor(df$data, levels=c("A","B","AB","O"), labels=c("BT_A","BT_B","BT_AB","BT_O"))
+
+#######################################################################################################
 ##### assign values to columns by factors ######
 df$score[df$fac2 == 'low'] <- 60
 
