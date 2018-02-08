@@ -12,6 +12,10 @@ Which index has NA value?
 > which(is.na(df$sel_col))
 [1] 146308
 
+###################################################################################################
+## use of if-else condition, without using loop
+#DF1$Activity <- ifelse(DF2$NAME == DF1$NAME, DF2$Activity, NA)
+df$from <- ifelse(df$to == 0, 1, 0)  # meaning: if to==0,from = 1; if to==1, from=0
 
 #####################################################################################################
 ## calculate max & min in a row of data ##
