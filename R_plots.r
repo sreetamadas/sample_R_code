@@ -1,8 +1,12 @@
 ##################################################
 ##### plots in R: base graphics, ggplot #####
-# scatterplot (2D, 3D), histogram & density plot, boxplot, violinPlot, barplot, bubblePlot
+# scatterplot (2D, 3D)
+# histogram & density plot, 
+# boxplot, violinPlot, 
+# barplot, stacked barchart
+# bubblePlot
 # heatmap & matrices
-# multiple plots, dual axes, facet wrap & grid, cowplot
+# multiple plots, dual axes, facet wrap & grid, cowplot, shape & color changes
 
 #####################################################################
 ### set the layout of a plot 
