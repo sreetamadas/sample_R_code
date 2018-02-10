@@ -1,5 +1,6 @@
 ##################################################
 ##### plots in R: base graphics, ggplot #####
+# venn diagram
 # scatterplot (2D, 3D)
 # histogram & density plot, 
 # boxplot, violinPlot, 
@@ -53,6 +54,21 @@ for(i in 4:ncol(df)) {
 
 
 ###############################################################################################
+### venn diagram  ###
+# https://stackoverflow.com/questions/8713994/venn-diagram-proportional-and-color-shading-with-semi-transparency
+# packages : venneuler, eulerr
+# method 1
+library(venneuler)  # not showing overlaps correctly
+v <- venneuler(c(A=30, B=50, "A&B"=20 ))
+plot(v)
+# method 2
+library(eulerr)   # not showing overlap correctly
+v <- euler(c(A=30, B=50, "A&B"=20))
+plot(v)
+
+
+
+
 ### scatter plot  ###
 # changing line width (lwd) & type (lty) =>  http://www.statmethods.net/advgraphs/parameters.html
 # method 1: line plot
