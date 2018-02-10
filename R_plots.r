@@ -61,11 +61,21 @@ for(i in 4:ncol(df)) {
 library(venneuler)  # not showing overlaps correctly
 v <- venneuler(c(A=30, B=50, "A&B"=20 ))
 plot(v)
+
 # method 2
 library(eulerr)   # not showing overlap correctly
 v <- euler(c(A=30, B=50, "A&B"=20))
 plot(v)
 
+# method 3
+# https://cran.r-project.org/web/packages/VennDiagram/VennDiagram.pdf
+library(VennDiagram)
+#venn.plot <- draw.pairwise.venn(set1_area, set2_area, intersection_area_between_sets, c("set1 label", "set 2 label"), 
+#                                scaled=TRUE, fill = c("blue", "red"), euler.d=TRUE)
+venn.plot <- draw.pairwise.venn(round(size1, digits=1), round(size2,digits=1), round(size1_2,digits=1), c("set1", "set2"), 
+                                scaled=TRUE, fill = c("blue", "red"), euler.d=TRUE)
+grid.newpage()
+# round() performs rounding off to the no. of places specified in digits
 
 
 
