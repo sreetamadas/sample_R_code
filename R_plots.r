@@ -79,6 +79,9 @@ grid.newpage()
 
 # method 4: using venn in gplot; not tried out
 # xhttps://cran.r-project.org/web/packages/gplots/vignettes/venn.pdf
+### GOOGLE: venndiagrams in R  (for other options)
+
+
 
 
 ### scatter plot  ###
