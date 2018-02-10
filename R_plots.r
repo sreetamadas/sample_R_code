@@ -77,6 +77,8 @@ venn.plot <- draw.pairwise.venn(round(size1, digits=1), round(size2,digits=1), r
 grid.newpage()
 # round() performs rounding off to the no. of places specified in digits
 
+# method 4: using venn in gplot; not tried out
+# xhttps://cran.r-project.org/web/packages/gplots/vignettes/venn.pdf
 
 
 ### scatter plot  ###
