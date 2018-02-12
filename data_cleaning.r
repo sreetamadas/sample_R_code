@@ -1,14 +1,14 @@
-## cleaning casting production data
+## cleaning production data
 ## remove rows where the categorical var. x1 value is blank (NA)
 ## remove rows where the continuous var x2 value is blank (NA)
 ## remove rows where the kpi is blank (NA) 
 ## set rows with 'NA' in x3 & x4 to '0'
 ## remove rows where x4 is negative
 
-setwd("C:/Users/DAR9KOR/Desktop/data/CLIENT_DATA/MAXION/analysis/")
+setwd("C:/Users/Desktop/data/analysis/")
 
 ### read production data for casting 
-raw_input <- read.csv("C:/Users/DAR9KOR/Desktop/data/CLIENT_DATA/MAXION/analysis/J2_casting_production.csv")
+raw_input <- read.csv("C:/Users/Desktop/data/analysis/J2_casting_production.csv")
 
 
 ###############################################################################
