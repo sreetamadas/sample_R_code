@@ -8,7 +8,7 @@
 setwd("C:/Users/Desktop/data/analysis/")
 
 ### read production data for casting 
-raw_input <- read.csv("C:/Users/Desktop/data/analysis/J2_casting_production.csv")
+raw_input <- read.csv("C:/Users/Desktop/data/analysis/production.csv")
 
 
 ###############################################################################
