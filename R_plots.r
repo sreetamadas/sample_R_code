@@ -63,7 +63,7 @@ for(i in 1:17) {
   col <- paste('D',i, sep='')
   plot(as.POSIXct(df$time, format="%Y-%m-%d %H:%M:%S"), df[,col], type='l', xlab='', xaxt = "n", 
        ylab=i, lwd=0.5, cex.lab=4, cex.axis=2, ylim=c(-0.1,1.1)) # cex.axis=1.5, 
-  axis.POSIXct(1, at=seq(daterange[1], daterange[2], by="2 hour"), format="%b%d %H:%M", cex.axis=4)
+  axis.POSIXct(1, at=seq(daterange[1], daterange[2], by="2 hour"), format="%b%d, %H:%M", cex.axis=4, tck= 0.1)  # tck: +ve -> ticks inside plot
 
   #scale_x_datetime(date_breaks = "12 hour", labels = date_format("%b %d - %H:%M")) + # in ggplot
     #theme(axis.text.x = element_text(angle = 25, vjust = 1.0, hjust = 1.0))
