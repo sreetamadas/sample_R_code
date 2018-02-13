@@ -17,10 +17,19 @@ new_df <- cbind(df['time'], #df['id'],df['A'],df['B'],df['C'],
 
 
 ## reshaping data: from long to wide format                             
-library(reshape2)                             
-cast.df <- dcast(original_df, formula = dateTime ~ ID, value.var = "to")   
+#library(reshape2)                             
+#cast.df <- dcast(original_df, formula = dateTime ~ ID, value.var = "to")   
 # this means we get 1 column for each ID, 1 row at each timeStamp, & the value in the cell corresponds to the value in 'to' column 
-# of original dataframe                         
+# of original dataframe
+
+## fill empty cells: NA values with last known state
+#cast.dev <- na.locf(cast.dev, fromLast = FALSE)  # for all entries, copy from previous value
+#cast.dev <- na.locf(cast.dev, fromLast = TRUE)  # for 1st entry, copy from next value                             
+                             
+# convert the data to numeric format
+#for (i in 2:6) {
+#  cast.dev[,i] <- as.numeric(cast.dev[,i])
+#}                             
                              
 ########################################################################################
 ### association rule mining
