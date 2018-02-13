@@ -52,8 +52,26 @@ for(i in 4:ncol(df)) {
   dev.off()
 }
 
-
 ###############################################################################################
+#### control axis labeling
+png('newFig.png', h=3000, w=6000 )
+attach(mtcars, warn.conflicts = FALSE)
+par(mfrow=c(17,1))  # no. of rows, no. of col : this creates 17 figs
+par(mar=c(5,7,5,1))
+daterange=c(as.POSIXlt(min(df$time)), as.POSIXlt(max(df$time)))
+for(i in 1:17) {
+  col <- paste('D',i, sep='')
+  plot(as.POSIXct(df$time, format="%Y-%m-%d %H:%M:%S"), df[,col], type='l', xlab='', xaxt = "n", 
+       ylab=i, lwd=0.5, cex.lab=4, cex.axis=2, ylim=c(-0.1,1.1)) # cex.axis=1.5, 
+  axis.POSIXct(1, at=seq(daterange[1], daterange[2], by="2 hour"), format="%b%d %H:%M", cex.axis=4)
+
+  #scale_x_datetime(date_breaks = "12 hour", labels = date_format("%b %d - %H:%M")) + # in ggplot
+    #theme(axis.text.x = element_text(angle = 25, vjust = 1.0, hjust = 1.0))
+}
+dev.off()
+
+
+#################################################################################################
 ### venn diagram  ###
 # https://stackoverflow.com/questions/8713994/venn-diagram-proportional-and-color-shading-with-semi-transparency
 # packages : venneuler, eulerr
