@@ -15,3 +15,16 @@ cn <- colnames(df)[-(1:5)]
 new_df <- cbind(df['time'], #df['id'],df['A'],df['B'],df['C'],
                 device=apply( df[,-(1:5)] != 0, 1 , function(x) paste(cn[x],collapse=',')))
 
+
+########################################################################################
+### association rule mining
+# http://r-statistics.co/Association-Mining-With-R.html                             
+# http://blog.hackerearth.com/beginners-tutorial-apriori-algorithm-data-mining-r-implementation
+
+library(arules)
+library(arulesViz)
+
+# Create an item frequency plot for the top 5 items
+itemFrequencyPlot(dat,topN=5,type="absolute")  # not working, plotly not installed properly ; missing libraries
+                             
+                             
