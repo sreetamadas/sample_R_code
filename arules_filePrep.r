@@ -1,4 +1,5 @@
 ### create a single column of transactions/ states from values (0,1) in the columns of the individual items
+# https://stackoverflow.com/questions/48642085/how-to-reshape-data-with-0-and-1-in-cells-to-have-only-cells-with-1/48642251#48642251
 # steps
 # store the colnames (excluding dateTime) into a vector called cn
 # df[,-1] != 0 returns a matrix of TRUE/FALSE being TRUE where different from zero
