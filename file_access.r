@@ -12,9 +12,9 @@ dat <- read.csv(paste(path,"sample_data.csv", sep=''), header=FALSE)  # set head
 #https://www.r-bloggers.com/getting-data-from-an-online-source/
 
 
-
 ## access all filenames in a location 9equivalent to 'ls' on linux)
 details <- list.files(filepath)
+
 
 ## get sorted (by name) filelist in the path / location
 # https://stackoverflow.com/questions/14496325/natural-sort-order-human-sort-order-in-r-list-files
@@ -26,4 +26,5 @@ details <- mixedsort(details, decreasing=FALSE)
 # https://stackoverflow.com/questions/13762224/how-to-sort-files-list-by-date
 
 
-
+## read a dat file
+A <- read.table(paste(filepath,'A.dat',sep=''), skip=1)  ## header=TRUE,
