@@ -206,12 +206,17 @@ min_ab <- tapply(df$ab, df$fac, FUN=min)
 
 tmp_df <- cbind(tmp_df, sd_ab, max_ab, min_ab) 
 
-
 #######################################################################################################
 ### convert a datafarme to a matrix ; can be done only for columns (here, 5-19 of df) which have numerical data
 mattest <- matrix(as.numeric(unlist(testdf[5:19])),nrow=nrow(testdf))  # nrow gives no. of rows in matrix
 colnames(mattest) <- c(1:15)                    
              
 ##################################################################################################
+ ## convert from no to binary: 
+ intToBits(16640)
+ ## convert from binary to integer: 
+ strtoi("111111111111111", base = 2)
+                           
+                           
                   
                            
