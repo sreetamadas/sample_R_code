@@ -15,7 +15,13 @@ cn <- colnames(df)[-(1:5)]
 new_df <- cbind(df['time'], #df['id'],df['A'],df['B'],df['C'],
                 device=apply( df[,-(1:5)] != 0, 1 , function(x) paste(cn[x],collapse=',')))
 
+## remove timeDate, & empty rows in device col
+new_df$time <- NULL
+new_df <- data.frame(new_df[!(new_df$device == "") ,])
+colnames(new_df)[1] <- 'device'
 
+                             
+                             
 ## reshaping data: from long to wide format                             
 #library(reshape2)                             
 #cast.df <- dcast(original_df, formula = dateTime ~ ID, value.var = "to")   
@@ -39,6 +45,15 @@ new_df <- cbind(df['time'], #df['id'],df['A'],df['B'],df['C'],
 library(arules)
 library(arulesViz)
 
+## convert to transactions format
+tData <- as (new_df, "transactions") 
+#inspect(head(tData, 3))
+
+## get the most frequent items
+frequentItems <- eclat (tData, parameter = list(supp = 0.07, maxlen = 5)) # calculates support for frequent items
+inspect(frequentItems)                             
+                             
+                             
 # Create an item frequency plot for the top 5 items
 itemFrequencyPlot(dat,topN=5,type="absolute")  # not working, plotly not installed properly ; missing libraries
                              
