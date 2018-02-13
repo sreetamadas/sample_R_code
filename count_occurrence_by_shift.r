@@ -1,3 +1,17 @@
+#### counting occurrences  ####
+## method 1:
+new_df <- data.frame(as.character(levels(as.factor(df$ID))))
+num_of_instances <- tapply(df$someVariable, df$ID, function(x) length(unique(x))) # count no. of occurrences of each ID
+
+                           
+## method 2:
+library(dplyr)
+dev_occurrence <- new_df %>% 
+          group_by(device) %>%
+          summarise(counts = length(device))
+
+
+### method 3:
 w_mc$Date <- format(as.POSIXct(w_mc$Date, format='%d.%m.%Y'), format="%Y-%m-%d")
 w_mc$Time[w_mc$Shift == '1'] <- '04:00:00'
 w_mc$Time[w_mc$Shift == '2'] <- '12:00:00'
