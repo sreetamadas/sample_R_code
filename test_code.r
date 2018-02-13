@@ -13,12 +13,12 @@ Which index has NA value?
 [1] 146308
 
 ###################################################################################################
-## use of if-else condition, without using loop
+#### use of if-else condition, without using loop
 #DF1$Activity <- ifelse(DF2$NAME == DF1$NAME, DF2$Activity, NA)
 df$from <- ifelse(df$to == 0, 1, 0)  # meaning: if to==0,from = 1; if to==1, from=0
 
 #####################################################################################################
-## calculate max & min in a row of data ##
+#### calculate max & min in a row of data ##
 
 1. create a dataframe with the columns (from each row) which should be included in the calculation
 2. run the following code on it
@@ -43,7 +43,7 @@ max(df$y, na.rm=T)
 sort(df$y, decreasing = TRUE)
 
 ####################################################################################################
-## append data to a list
+#### append data to a list  #####
 # at the beginning
 df <- append(0,df)             
 
@@ -57,15 +57,13 @@ df <- append(df,0)
 df_avg <- summaryBy(. ~ Date + Shift, FUN=c(mean, median, sd), data=df, na.rm=TRUE)   ## median affected by NA values
 
 ######################################################################################################
-             
-## combine dataframes
+#### combine dataframes
 dat <- merge(w_mc, df_avg, by = "DateTime")    # inner join
 #dat <- merge(w_mc, df_avg, by = "DateTime", all.x = TRUE)  # check left/right/outer/inner join
 #sel_dat <- merge(sel_dat, tmp, by.x='dateTime', all.x = TRUE, all.y = TRUE)
 
 ######################################################################################################
-             
-## calculate new col based on condition
+##### calculate new col based on condition
 
 # NAs introduced by coercion since the numerator & denominator are blank for some rows
 # so use the if-else condition
@@ -79,7 +77,8 @@ for (i in 1:nrow((prdf))) {
 }
 
 #####################################################################################################
-####### correlation among variables   ##############
+####### correlation among variables   #######
+             
 numeric_data <- data[,4:17]  # create new df with only the numeric columns
 cor(numeric_data)           # calculate corr
 library(corrplot)
@@ -87,6 +86,7 @@ corrplot(cor(numeric_data),type="lower", method="color", tl.cex=0.6, cl.cex=0.8)
 
 ##########################################################################################################
 ### PCA ###
+             
 t <- d[,c(5,14:ncol(d))]     # take numeric columns only, not factors
 
 #t <- t[, colSums(t != 0) > 0]    # remove columns with only zeroes
@@ -102,14 +102,13 @@ plot(m.pca$x[,1:2],)
 summary(m.pca)
 
 #####################################################################################################
-###  normalize data  ############
+#####  normalize data  #######
 
 subset=s110[strftime(s110$txtime,'%d',tz = 'UTC')== dateofmonth,]
 library(clusterSim)
 Y_z   <- data.Normalization(subset$Y,type="n1",normalization="column")
 
 ###########################################################################################################
-             
 ### combine multiple conditions into a data frame / subsetting data
 # http://stackoverflow.com/questions/4935479/how-to-combine-multiple-conditions-to-subset-a-data-frame-using-or
 
@@ -123,7 +122,6 @@ df <- subset(dat, subset = df$cat_X %in% c('M01','M02','M03','M04','M05') & df$Y
 new_df <- df[,c(5,14:ncol(df))]     # take selected columns by column no.
 
 ########################################################################################################
-             
 ### using data table to subset data ###
 ## for each value of X, subset data with the min. value of Y
 library(data.table)
@@ -179,14 +177,12 @@ df <- df[ , !names(df) %in% c("col1","col2","col3","col5")] ## works as expected
               
 
 ###########################################################################
-             
 ## fill in rows corresponding to added timestamps
 #library(padr)  pad(a)
 df <- na.locf(df, fromLast = TRUE)
               
 ###################################################################################
-             
-## binning data ###
+#### binning data ###
 #fac <- cut(df$subset.Y, c(-10, 20, 50, 80, 110, 140, 170, 200, 230, 260),labels=c('1','2','3','4', '5','6','7','8','9')) # rename levels
 #fac <- cut(df$subset.Y, c(-10,20,40,60,80,100,120,140,160,180,200,220,240,260),labels=c(1:13)) # rename levels
 fac <- cut(df$subset.Y, breaks=seq(-10,260,by=10), labels=c(1:27))
@@ -226,7 +222,7 @@ array_name = sqldf("select DISTINCT sno as 'sensor ID' from dat")
                           
                            
 ########################################################################################################
-## calculate statistical parameters for data grouped by factors ###
+#### calculate statistical parameters for data grouped by factors ###
 
 df <- data.frame(subset1$txtime, subset1$Y, subset1$xA, subset1$xB, subset1$xC)   
 df$Y_n <- df$subset1.Y * 100/constant
@@ -244,7 +240,7 @@ tmp_df <- cbind(tmp_df, sd_ab, max_ab, min_ab)
 
 
 #######################################################################################################
-## assign day of week
+#### assign day of week  #####
 df$date <- format(as.POSIXct(df$txtime, format="%Y-%m-%d %H:%M:%S"), format="%Y-%m-%d") # %H:%M:%S
 df$day <- as.POSIXlt(df$date)$wday  # as number; sunday -> 0, Monday -> 1 & so on
 df$day2 <- weekdays(as.Date(df$txtime))  # as text, ie, by name
@@ -276,8 +272,7 @@ dat$dateTime <- as.POSIXct(dat$dateTime, format="%Y-%m-%d %H:%M:%S") + 5*60*60 +
                            
              
 ##################################################################################################
-                           
-## check no. of repeats                           
+#### check no. of repeats  ####                          
 library(plyr)
 sel_dat <- join(sel_dat, count(sel_dat, "dateTime"))
              
