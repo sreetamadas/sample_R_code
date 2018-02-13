@@ -110,3 +110,5 @@ df <- merge(df, key_value_df, by=c('A','B','C'), all.x = TRUE)
 # sort df by row id, since the time stamps are repeated as they are 500ms apart
 df <- df[order(df$id), ]
 
+rm(A,B,C,i,j,key1,key2,key3,stateVec,time,tt, list_of_paired_keys, key_value_df)
+
