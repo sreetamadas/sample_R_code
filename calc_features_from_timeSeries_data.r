@@ -166,6 +166,50 @@ for (id in 1:length(IDlist_event)) {
   new_df$t_ON <- new_df$t_ON/60  # in min
   new_df$total_time <- new_df$t_ON + new_df$t_OFF
   
+  # format date & hr
+  new_df$date <- format(as.POSIXct(new_df$dateHr, format='%Y-%m-%d %H'), format='%Y-%m-%d')
+  new_df$hr <- as.numeric(format(as.POSIXct(new_df$dateHr, format='%Y-%m-%d %H'), format='%H'))
+  
+  # assign day of week as number
+  new_df$day <- as.POSIXlt(new_df$date)$wday
+  new_df$col[new_df$day == 1| new_df$day == 2| new_df$day == 3 | new_df$day == 4 ] <- 'grey' 
+  new_df$col[new_df$day == 5] <- 'green'
+  new_df$col[new_df$day == 6] <- 'black'
+  new_df$col[new_df$day == 0] <- 'red'  # sunday
+
+  
+  ########################################################################
+  #### calculate duration of each instance of a state  
+  # get rows where state_change occurs
+  cont_on <- subset(sel_dat, sel_dat$state_change == 1)
+  
+  # get the 1st row of the df
+  cont_on <- rbind(sel_dat[1,], cont_on)
+  
+  # remove older columns of timedel, ON & OFF time
+  cont_on <- cont_on[ , !names(cont_on) %in% c("timedel","on","off")]
+  
+  # calculate time differences:
+  ## calculate intervals between successive events
+  rm(c_time, timedel)
+  c_time <- as.POSIXlt(cont_on$dateTime, format="%Y-%m-%d %H:%M:%S" )
+  timedel <- as.numeric(difftime(c_time[2:length(c_time)] , c_time[1:(length(c_time)-1)], tz = 'UTC')) #, units="mins")
+  ## add a value to end (or start?) of column, as length(timedel) = (No. of rows in DF) - 1 
+  # check what value should be added
+  timedel <- append(timedel, 60) #'NA') 
+  #sel_dat <- sel_dat[-nrow(sel_dat),]   ## remove last row of data, corrs to which there is no time duration
+  cont_on <- cbind(cont_on,timedel)  ## add the time differences column to the dataframe
+  #cont_on$timedel[is.na(cont_on$timedel)] <- 0  ## this is to take care of entries where the dateTime was modified to date (see above)
+  
+  # calculate ON & Off time for each instance
+  cont_on$to <- as.numeric(cont_on$to)
+  cont_on$from <- as.numeric(cont_on$from)
+  cont_on$timedel <- cont_on$timedel/60
+  cont_on$on <- cont_on$to * cont_on$timedel   # in secs; divide by 60 to get in min
+  cont_on$off <- (cont_on$timedel - cont_on$on)  # in secs; divide by 60 to get in min
+  
+ 
+ } 
 
 
 
