@@ -1,7 +1,7 @@
-#### check no. of repeats  ####                          
+#### check no. of repeats  ####           
+
 library(plyr)
 sel_dat <- join(sel_dat, count(sel_dat, "dateTime"))
-             
                            
                            
 ## techniques to remove repeats
@@ -30,3 +30,4 @@ sel_dat$new <- unlist(sapply(unique(sel_dat$dateTime), function(x) {
     as.character(seq(as.POSIXct(x), by = 60/freq, length.out = freq))  #(new, by=freq, length.out=freq)
   }))
          
+
