@@ -10,12 +10,18 @@
 df$D1 <- NULL
 df$day <- NULL
 
-# reshape data
+# format data appropriately
 cn <- colnames(df)[-(1:5)]
 new_df <- cbind(df['time'], #df['id'],df['A'],df['B'],df['C'],
                 device=apply( df[,-(1:5)] != 0, 1 , function(x) paste(cn[x],collapse=',')))
 
 
+## reshaping data: from long to wide format                             
+library(reshape2)                             
+cast.df <- dcast(original_df, formula = dateTime ~ ID, value.var = "to")   
+# this means we get 1 column for each ID, 1 row at each timeStamp, & the value in the cell corresponds to the value in 'to' column 
+# of original dataframe                         
+                             
 ########################################################################################
 ### association rule mining
 # http://r-statistics.co/Association-Mining-With-R.html                             
