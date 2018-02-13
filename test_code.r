@@ -12,10 +12,42 @@ Which index has NA value?
 > which(is.na(df$sel_col))
 [1] 146308
 
+####################################################################################################
+#### append data to a list  #####
+# at the beginning
+df <- append(0,df)             
+
+# at the end
+df <- append(df,0)             
+
+####################################################################################################
+## say, a dataframe has multiple values (taken at short intervals) of temp, pr etc per shift
+## create a new dataframe with averaged values for these parameters
+df_avg <- summaryBy(. ~ Date + Shift, FUN=c(mean, median, sd), data=df, na.rm=TRUE)   ## median affected by NA values
+
+######################################################################################################
+#### combine dataframes
+dat <- merge(w_mc, df_avg, by = "DateTime")    # inner join
+#dat <- merge(w_mc, df_avg, by = "DateTime", all.x = TRUE)  # check left/right/outer/inner join
+#sel_dat <- merge(sel_dat, tmp, by.x='dateTime', all.x = TRUE, all.y = TRUE)
+             
 ###################################################################################################
 #### use of if-else condition, without using loop
 #DF1$Activity <- ifelse(DF2$NAME == DF1$NAME, DF2$Activity, NA)
 df$from <- ifelse(df$to == 0, 1, 0)  # meaning: if to==0,from = 1; if to==1, from=0
+
+######################################################################################################
+##### calculate new col based on condition
+# NAs introduced by coercion since the numerator & denominator are blank for some rows
+# so use the if-else condition
+for (i in 1:nrow((prdf))) {
+  if(prdf$x[i] == 0) {
+    prdf$y[i] <- 0
+  }
+  else{
+    prdf$y[i] <- as.numeric(as.character(prdf$y[i]))/prdf$x[i]
+  }
+}
 
 #####################################################################################################
 #### calculate max & min in a row of data ##
@@ -42,39 +74,6 @@ df$diff <- 0.04*df$min - (df$max - df$min)				# calculation on selected data
 max(df$y, na.rm=T)
 sort(df$y, decreasing = TRUE)
 
-####################################################################################################
-#### append data to a list  #####
-# at the beginning
-df <- append(0,df)             
-
-# at the end
-df <- append(df,0)             
-
-####################################################################################################
-## say, a dataframe has multiple values (taken at short intervals) of temp, pr etc per shift
-## create a new dataframe with averaged values for these parameters
-
-df_avg <- summaryBy(. ~ Date + Shift, FUN=c(mean, median, sd), data=df, na.rm=TRUE)   ## median affected by NA values
-
-######################################################################################################
-#### combine dataframes
-dat <- merge(w_mc, df_avg, by = "DateTime")    # inner join
-#dat <- merge(w_mc, df_avg, by = "DateTime", all.x = TRUE)  # check left/right/outer/inner join
-#sel_dat <- merge(sel_dat, tmp, by.x='dateTime', all.x = TRUE, all.y = TRUE)
-
-######################################################################################################
-##### calculate new col based on condition
-
-# NAs introduced by coercion since the numerator & denominator are blank for some rows
-# so use the if-else condition
-for (i in 1:nrow((prdf))) {
-  if(prdf$x[i] == 0) {
-    prdf$y[i] <- 0
-  }
-  else{
-    prdf$y[i] <- as.numeric(as.character(prdf$y[i]))/prdf$x[i]
-  }
-}
 
 #####################################################################################################
 ####### correlation among variables   #######
@@ -103,11 +102,11 @@ summary(m.pca)
 
 #####################################################################################################
 #####  normalize data  #######
-
 subset=s110[strftime(s110$txtime,'%d',tz = 'UTC')== dateofmonth,]
 library(clusterSim)
 Y_z   <- data.Normalization(subset$Y,type="n1",normalization="column")
 
+             
 ###########################################################################################################
 ### combine multiple conditions into a data frame / subsetting data
 # http://stackoverflow.com/questions/4935479/how-to-combine-multiple-conditions-to-subset-a-data-frame-using-or
@@ -179,6 +178,7 @@ df <- df[ , !names(df) %in% c("col1","col2","col3","col5")] ## works as expected
 ###########################################################################
 ## fill in rows corresponding to added timestamps
 #library(padr)  pad(a)
+library(zoo)             
 df <- na.locf(df, fromLast = TRUE)
               
 ###################################################################################
