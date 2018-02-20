@@ -30,6 +30,7 @@ colnames(new_df)[1] <- 'device'
 # of original dataframe
 
 ## fill empty cells: NA values with last known state
+#library(zoo)                             
 #cast.dev <- na.locf(cast.dev, fromLast = FALSE)  # for all entries, copy from previous value
 #cast.dev <- na.locf(cast.dev, fromLast = TRUE)  # for 1st entry, copy from next value                             
                              
