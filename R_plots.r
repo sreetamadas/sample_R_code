@@ -90,6 +90,10 @@ plot(v)
 library(VennDiagram)
 #venn.plot <- draw.pairwise.venn(set1_area, set2_area, intersection_area_between_sets, c("set1 label", "set 2 label"), 
 #                                scaled=TRUE, fill = c("blue", "red"), euler.d=TRUE)
+size1 <- sum(subset(df, df$col1 == 1)$size_val)
+size2 <- sum(subset(df, df$col2 == 1)$size_val)
+size1_2 <- sum(subset(df, df$col1 == 1 & df$col2 == 1)$size_val)
+
 venn.plot <- draw.pairwise.venn(round(size1, digits=1), round(size2,digits=1), round(size1_2,digits=1), c("set1", "set2"), 
                                 scaled=TRUE, fill = c("blue", "red"), euler.d=TRUE)
 grid.newpage()
