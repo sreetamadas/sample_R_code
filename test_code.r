@@ -12,6 +12,9 @@ Which index has NA value?
 > which(is.na(df$sel_col))
 [1] 146308
 
+###################################################################################################
+### convert multiple cols of a df to numeric format
+df <- sapply(df[names(df)],as.numeric)
 ####################################################################################################
 #### append data to a list  #####
 # at the beginning
