@@ -34,6 +34,9 @@ prdcn <- raw_input[!(raw_input$x1 == "" | is.na(raw_input$x1) | raw_input$x2 == 
 #prdcn <- raw_input[!(raw_input$y == "" | is.na(raw_input$y)), ]
 
 
+### Method 3 : remove rows where at least any 1 cell is NA ###
+df <- na.omit(df)
+
 ######################################################################
 ### set NA to zero for continuous var x3 & x4 ######
 prdcn$x3 <- as.character(prdcn$x3)
