@@ -274,8 +274,19 @@ ggplot(df, aes(x= reorder(df$Model,-df$value), df$value, fill=df$value)) +
 
 ### stacked barchart  ###
 ## create stacked bars for: multiple shifts data (for a continuous var.) on a date & for multiple categorical variables
+# method 1
 ggplot(data = df, aes(as.POSIXct(df$Date), df$continuous_var, colour=as.factor(df$categorical_var))) + 
           geom_bar(stat="identity", aes(fill=as.factor(df$categorical_var))) + scale_fill_brewer(palette = 12)
+# method 2
+ggplot(data = df, aes(as.POSIXct(df$Date), df$continuous_var, group = df$categorical_var, fill = df$categorical_var)) +
+  geom_bar(stat = "identity", width = 0.5) + labs(x='week',y='avg energy') +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+## bar Chart for multiple categories without stacking
+ggplot(data = wk_df1, aes(as.POSIXct(df$Date), df$continuous_var, group = df$categorical_var, fill = df$categorical_var)) +
+  geom_bar(stat = "identity", width = 0.5, position = "dodge") + labs(x='week',y='avg energy') +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
 
 
 
