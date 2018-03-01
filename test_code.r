@@ -150,7 +150,9 @@ names(df)[names(df) == "oldColumnName"] <- "NewColumnName"
 df$col_to_remove <- NULL
 df <- df[ , !names(df) %in% c("col1","col2","col3","col5")] ## works as expected
               
-
+## reorder df columns
+dat <- dat[c("time", "col3", "col5","col2","col1","col4")]  # reorder by column name             
+             
 ###########################################################################
 ## fill in rows corresponding to added timestamps
 #library(padr)  pad(a)
