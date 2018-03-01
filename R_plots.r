@@ -200,6 +200,9 @@ ggplot(tmp_df, aes(tmp_df$day_of_week, tmp_df$y)) +
   labs(x='day', y='Y') + 
   theme(axis.text=element_text(size=14), axis.title=element_text(size=16))  + 
   coord_cartesian(ylim=c(0,100)) # used to zoom into a selected section
+## group by 2 factors
+ggplot(df,aes(df$month,df$Y,fill=df$id)) + geom_boxplot(position=position_dodge(1)) +
+  geom_hline(data=df, aes(yintercept=100), linetype='dashed') + labs(x='month', y='regresssion variable')
 ## show number of data points in the box-plot
 f <- function(y) 
      c(label=length(y), y=median(y))
