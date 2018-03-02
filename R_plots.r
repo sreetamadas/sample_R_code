@@ -111,13 +111,18 @@ grid.newpage()
 # method 1: line plot
 plot(as.POSIXct(df$time), df$y, type='l', lwd=0.5, xlab="time", ylab="var. Y", cex.axis=1.5, cex.lab=2) #, ylim=c(MIN,MAX))
 
-# method 2: line plot in ggplot
+# method 2: LINE plot in ggplot
 library(ggplot2)
 ggplot(data=df, aes(as.POSIXct(df$time), df$y)) + geom_point(size=0.2, colour=as.factor(df$colour)) +  # color by factor
   labs(x="time", y="Y") + ylim(0,180) + 
   geom_line(size=0.1, colour=as.factor(df$colour)) +  # colour="blue"
   geom_hline(data=df, aes(yintercept=10), linetype='dashed') +  # adding horizontal line to plot
   theme(axis.text=element_text(size=14), axis.title=element_text(size=14,face="bold"))) 
+# formatting date time breaks on X-axis
+library(scales)
+ggplot(data=new_df, aes(as.Date(new_df$date), new_df$Y, colour=as.factor(new_df$id))) + 
+  geom_point() + geom_line() + coord_cartesian(ylim=c(0,21000)) + labs(x='', y='energy (kWh)') + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + scale_x_date(date_breaks = '1 week')
 
 
 ### scatter plot for all variables in a datafarme
