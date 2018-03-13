@@ -23,6 +23,10 @@ fit <- stl(x, "periodic")
 plot(fit)
 
 
+# augmented Dickey-Fuller (ADF) test is a formal statistical test for stationarity
+adf.test(x, alternative = "stationary")
+
+
 ## checking that there is no predictive power in residuals
 fc <- rwf(x)
 res <- residuals(fc)
@@ -86,3 +90,48 @@ top2 = head(order, 2)
 # google: how to apply high pass filter in R
 # http://stackoverflow.com/questions/7105962/how-do-i-run-a-high-pass-or-low-pass-filter-on-data-points-in-r
 
+
+## creating differenced data
+library(astsa)
+xlag1=lag(x,-1)
+y=cbind(x,xlag1)
+#plot(y[,1], y[,2])
+
+
+# calculating differences
+library(astsa)
+diff1=diff(x, 1)
+plot(diff1)
+
+#####################################################################
+## arima methods for forecasting
+
+### sarima(Prod$Q, 1,0,0,0,1,1,7)
+# sarima(diff1, 1,0,0,0,1,1,12)
+
+#########################################################################
+## exponential smoothing methods for forecasting
+# https://www.otexts.org/fpp/7/4
+
+## fitting simple exponential smoothing
+fit_ses <- ses(x, h = 3)  # predict next 3 points
+fit_ses$model
+accuracy(fit_ses)
+plot(fit_ses, plot.conf=FALSE, fcol="white", type="o")
+lines(fitted(fit_ses), col="blue", type="o")
+lines(fit_ses$mean, col="blue", type="o")
+
+
+# holt's damped trend
+fit_hwd <- holt(x,damped=TRUE)
+plot(fit_hwd, plot.conf=FALSE, fcol="white", type="o")
+accuracy(fit_hwd)
+
+
+# holt winter's (trend + seasonality)
+fit_hw <- hw(x,seasonal="additive")
+fit_hw$model
+plot(fit_hw, plot.conf=FALSE, type="o", fcol="white", xlab="Year")
+lines(fitted(fit_hw), col="red", lty=2)
+lines(fit_hw$mean, type="o", col="red")
+accuracy(fit_hw)
