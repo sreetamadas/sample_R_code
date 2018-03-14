@@ -110,6 +110,14 @@ grid.newpage()
 # changing line width (lwd) & type (lty) =>  http://www.statmethods.net/advgraphs/parameters.html
 # method 1: line plot
 plot(as.POSIXct(df$time), df$y, type='l', lwd=0.5, xlab="time", ylab="var. Y", cex.axis=1.5, cex.lab=2) #, ylim=c(MIN,MAX))
+## formatting dateTime breaks on x-axis
+daterange=c(as.POSIXlt(min(s$time)), as.POSIXlt(max(s$time)))
+plot(as.POSIXct(s$time, format="%Y-%m-%d %H:%M:%S"), s$conti_var, type='l', xlab='', xaxt = "n", 
+       ylab='var name', lwd=0.5, cex.lab=4, cex.axis=4, ylim=c(0,max(s$conti_var)+10) ) # cex.axis=1.5, 
+#axis.POSIXct(1, at=seq(daterange[1], daterange[2], by="2 hour"), format="%b%d %H", cex.axis=3.5, tck= 0.1)
+axis.POSIXct(1, at=seq(daterange[1], daterange[2], by="1 hour"), format="%d,%H:%M", cex.axis=3.5, cex.lab=2, tck= -0.01)
+abline(h=0, col='red')
+
 
 # method 2: LINE plot in ggplot
 library(ggplot2)
@@ -122,7 +130,9 @@ ggplot(data=df, aes(as.POSIXct(df$time), df$y)) + geom_point(size=0.2, colour=as
 library(scales)
 ggplot(data=new_df, aes(as.Date(new_df$date), new_df$Y, colour=as.factor(new_df$id))) + 
   geom_point() + geom_line() + coord_cartesian(ylim=c(0,21000)) + labs(x='', y='energy (kWh)') + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + scale_x_date(date_breaks = '1 week')
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + scale_x_date(date_breaks = '1 week') #+
+  # expand_limits(y=0) # Make sure to include 0 in the y axis
+  # expand_limits(y=c(0,10)) # Make sure to include 0,10 in the y axis
 
 
 ### scatter plot for all variables in a datafarme
