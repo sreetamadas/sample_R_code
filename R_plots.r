@@ -440,9 +440,11 @@ dev.off()
 
 ############################################################
 ### use of facet wrap & facet grid to plot data for multiple groups (factors or IDs)
+# control the no. of rows & cols in facet_wrap using nrow & ncol
+# http://ggplot2.tidyverse.org/reference/facet_wrap.html
 ggplot(data = df, aes(x = df$x, y = df$y)) + 
   geom_line(size=0.05) + geom_point(size=0.8) + coord_cartesian(ylim = c(0,5)) + 
-  facet_wrap(~ df$id) + labs(x='X', y='Y') + 
+  facet_wrap(~ df$id, nrow=2) + labs(x='X', y='Y') + 
   geom_hline(data= df, aes(yintercept = 2)) +
   geom_hline(data= df, aes(yintercept = 1))
 
