@@ -46,6 +46,8 @@ prdcn$x4[is.na(prdcn$x4)] <- 0
 prdcn$x3 <- as.integer(prdcn$x3)
 prdcn$x4 <- as.integer(prdcn$x4)
 
+# for all cols of df
+df[is.na(df)] <- 0
 
 ######################################################################
 ## remove data for shifts which produce multiple IDs on a m/c
