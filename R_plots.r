@@ -414,6 +414,7 @@ ggplot(x, aes(x$DateTime, x$continuous_var, group = x$categorical_var, colour=as
 
 ##########################################################
 ## Dual axis plot 
+### method 1
 par(mar=c(5,4,4,5)+.1)  # sets bottom, left, top and right margins respectively of the plot region in number of lines of text
 plot(x,y1,type="l", lwd=2, col="red", xlab="",ylab="", ylim=c(0,250))
 par(new=T)
@@ -426,6 +427,18 @@ axis(4)
 mtext("Y",side=2,line=2)
 mtext("Z",side=4,line=3)
 legend("bottomleft",col=c("red","blue","green","black"),lty=1,legend=c("Y1","Y2","Y3","Z"))
+
+## dual axis plot using ggplot : stacked bar + line
+# https://stackoverflow.com/questions/44640970/ggplot2-barplot-lineplot-dual-y-axis
+# bar plot with dual axis in ggplot
+ggplot(data = df, aes(df$date, df$Y1, group = df$Id, fill = df$Id)) +
+  geom_bar(stat = "identity", width = 0.5) + labs(x='day',y='var Y1') +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  scale_x_continuous(breaks=seq(1,28, by=2)) + 
+  geom_line(aes(y = df$Y2/4, group = 1), color = 'black') + #, size=0.8   ## divide by 4 to scale to similar values as Y1 -> easy to plot
+  geom_text(aes(y = df$Y2/4, label = round(df$Y2, 2)), vjust = 1.4, color = "black", size = 3) +
+  scale_y_continuous(sec.axis = sec_axis(trans = ~ .*4 , name="var Y2"))  ## do inverse operation (here, multiply) of the operation above
+
 
 ############################################################
 ## multiple line plots on the same figure
