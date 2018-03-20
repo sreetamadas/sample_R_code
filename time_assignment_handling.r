@@ -30,4 +30,23 @@ dat$dateTime <- as.POSIXct(dat$dateTime, format="%Y-%m-%d %H:%M:%S") + 5*60*60 +
                            
              
 ##################################################################################################
-                  
+### calculate aggregates date wise
+new_df <- data.frame(as.character(levels(as.factor(E$date))))
+colnames(new_df)[1] <- 'date'
+tot <- tapply(E$x, E$date, FUN=sum)
+new_df <- cbind(new_df,tot)
+new_df$date <- format(as.POSIXct(new_df$date, format="%Y-%m-%d"), format="%Y-%m-%d" )
+
+
+## if the daily aggregates are to be calculated from a different starting time, instead of 00:00 hrs, offset the time & then do as above
+# e.g. from 6am of today to 6am of next day
+E$dateTimeOffset <- as.POSIXct(E$DateTime, format="%Y-%m-%d %H:%M:%S") - 6*60*60   ### subtract 6 hours 
+E$date_offset <- format(as.POSIXct(E$dateTimeOffset, format = "%Y-%m-%d %H:%M:%S"), format="%Y-%m-%d")
+new_df <- data.frame(as.character(levels(as.factor(E$date_offset))))
+colnames(new_df)[1] <- 'date'
+#....
+
+
+
+
+
