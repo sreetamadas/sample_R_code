@@ -11,16 +11,30 @@ dev_occurrence <- new_df %>%
           summarise(counts = length(device))
 
 
+                           
 ### method 3: counts for individual factors (in wide format data, where there is separate col for each factor)
 # count the no. of cells where value in 1                           
 for(i in 1:5) {
   s <- sum(df[,i+1] == 1)
   print(paste(i,s,sep=' '))
 }                           
+
+
                            
+## method 4: alternate way of counting instances #########
+l30 <- subset(mc, mc$fac == '30')
+l50 <- subset(mc, mc$fac == '50')
+## etc ...
+
+## count instances in each bin
+count_l30 <- nrow(l30) * 100/nrow(mc)
+count_l50 <- nrow(l50) * 100/nrow(mc)
+# etc ...                           
+                           
+                          
                            
 ###############################################################################
-### method 4:
+### method 5:
 w_mc$Date <- format(as.POSIXct(w_mc$Date, format='%d.%m.%Y'), format="%Y-%m-%d")
 w_mc$Time[w_mc$Shift == '1'] <- '04:00:00'
 w_mc$Time[w_mc$Shift == '2'] <- '12:00:00'
