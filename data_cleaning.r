@@ -1,4 +1,5 @@
-## cleaning production data
+## cleaning data : deal with NA, INF or missing values
+
 ## remove rows where the categorical var. x1 value is blank (NA)
 ## remove rows where the continuous var x2 value is blank (NA)
 ## remove rows where the kpi is blank (NA) 
@@ -7,8 +8,8 @@
 
 setwd("C:/Users/Desktop/data/analysis/")
 
-### read production data for casting 
-raw_input <- read.csv("C:/Users/Desktop/data/analysis/production.csv")
+### read data 
+raw_input <- read.csv("C:/Users/Desktop/data/analysis/data.csv")
 
 
 ###############################################################################
@@ -36,7 +37,6 @@ prdcn <- raw_input[!(raw_input$x1 == "" | is.na(raw_input$x1) | raw_input$x2 == 
 
 ### Method 3 : remove rows where at least any 1 cell is NA ###
 df <- na.omit(df)
-
 ## remove NA values
 new_df <- new_df[complete.cases(new_df),]
 
@@ -52,7 +52,25 @@ prdcn$x4 <- as.integer(prdcn$x4)
 # for all cols of df
 df[is.na(df)] <- 0
 
+# set Inf to zero, or some other value
+new_df$col_calc <- new_df$col1/new_df$col2
+new_df$col_calc[is.na(new_df$col_calc)] <- -0.01
+new_df$col_calc[new_df$col_calc==Inf] <- 0
+
 ######################################################################
+## filling with values from preceding or succeeding cells
+#library(padr)  pad(a)
+# https://stackoverflow.com/questions/7735647/replacing-nas-with-latest-non-na-value
+# https://stackoverflow.com/questions/40219973/insert-new-series-rows-based-on-time-stamp-in-r
+# tidyr::fill
+library(zoo)
+sel_dat <- na.locf(sel_dat, fromLast = FALSE)  # for all entries, copy from previous value
+sel_dat <- na.locf(sel_dat, fromLast = TRUE)  # for 1st entry, copy from next value
+
+
+
+
+##############################################################################
 ## remove data for shifts which produce multiple IDs on a m/c
 ## for this, combine the date, shift & m/c column, & retain unique rows
 prdcn$DateShiftMc <- paste(prdcn$Date, prdcn$Shift, prdcn$Machine)
