@@ -45,8 +45,5 @@ E$date_offset <- format(as.POSIXct(E$dateTimeOffset, format = "%Y-%m-%d %H:%M:%S
 new_df <- data.frame(as.character(levels(as.factor(E$date_offset))))
 colnames(new_df)[1] <- 'date'
 #....
-
-
-
-
+## https://stackoverflow.com/questions/15284943/cut-a-posixct-by-specific-time-for-daily-means
 
