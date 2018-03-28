@@ -18,4 +18,5 @@ cast.dev <- dcast(combi, formula = dateTime ~ sno, value.var = "to")
 # 2 .....
 
 library(reshape2)
-long <- melt(df, id.vars = c("ID", "date"))
+long <- melt(df, id.vars = c("ID", "date"))  
+# all columns in the table, which are not listed in above command, will be put into a single column in the long format
