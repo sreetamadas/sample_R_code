@@ -1,6 +1,7 @@
 ##################################################
 ##### plots in R: base graphics, ggplot #####
 # venn diagram
+# pie chart 
 # scatterplot (2D, 3D)
 # histogram & density plot, 
 # boxplot, violinPlot, 
@@ -103,6 +104,11 @@ grid.newpage()
 # xhttps://cran.r-project.org/web/packages/gplots/vignettes/venn.pdf
 ### GOOGLE: venndiagrams in R  (for other options)
 
+
+## pie chart
+dev$percent <- 100 * dev$Y/sum(dev$Y)
+ggplot(dev, aes(x="", y=percent, fill=Id)) +  
+  geom_bar(width = 1, stat = "identity") + coord_polar("y", start=0)
 
 
 
