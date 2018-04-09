@@ -105,10 +105,12 @@ grid.newpage()
 ### GOOGLE: venndiagrams in R  (for other options)
 
 
-## pie chart
+
+#### pie chart ####
 dev$percent <- 100 * dev$Y/sum(dev$Y)
 ggplot(dev, aes(x="", y=percent, fill=Id)) +  
   geom_bar(width = 1, stat = "identity") + coord_polar("y", start=0)
+
 
 
 
