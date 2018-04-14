@@ -17,6 +17,10 @@ Which index has NA value?
 summary(df)
 str(df)
 
+## write output to an xlsx file
+library(xlsx)
+write.xlsx(df, file="sample_data.xlsx", append = FALSE, col.names = TRUE)
+
 ###################################################################################################
 ### convert multiple cols of a df to numeric format
 df <- sapply(df[names(df)],as.numeric)
