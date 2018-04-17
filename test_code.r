@@ -17,6 +17,12 @@ Which index has NA value?
 summary(df)
 str(df)
 
+##################################################################################################
+## read a specific sheet from a multi-sheet excel
+library(readxl)
+df <- read_excel(paste(path,"data/file name.xlsx",sep=''), sheet = 'sheet 1', skip=1)    # skip extra rows at start apart from col header
+
+
 ## write output to an xlsx file
 library(xlsx)
 write.xlsx(df, file="sample_data.xlsx", append = FALSE, col.names = TRUE)
