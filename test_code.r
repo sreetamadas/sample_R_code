@@ -20,6 +20,16 @@ str(df)
 ## remove rows from a df by row no.
 new_df <- new_df[-c(N1,N2), ]   # where N1, N2 indicate the selected row no.s to be removed
 
+## create an empty df & populate
+new_df <- data.frame(entry=numeric(),
+                     startTime=as.POSIXct(character()), #as.Date(character()), #character(),
+                     startTemp=numeric(),
+                     endTime=as.POSIXct(character()),  #as.Date(character()), #character(),
+                     endTemp=numeric(),
+                     #setTemp=numeric(),
+                     stringsAsFactors=FALSE
+)
+
 ##################################################################################################
 ## read a specific sheet from a multi-sheet excel
 library(readxl)
