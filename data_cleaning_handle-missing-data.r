@@ -11,8 +11,29 @@ setwd("C:/Users/Desktop/data/analysis/")
 ### read data 
 raw_input <- read.csv("C:/Users/Desktop/data/analysis/data.csv")
 
+################################################################################################
+## adding rows corresponding to missing time stamps
+# method 1
+sub <- subset(T, T$date == dateList[i])
+sub <- pad(sub)  # generate rows corresponding to missing time stamps
+sub$new_T <- sub$temp   # duplicate the temp column
+sub$new_T <- na.locf(sub$new_T, fromLast = FALSE) # for all missing entries, copy from previous value  
+new_df <- rbind(new_df, sub)
 
-###############################################################################
+# method 2
+# get list of dateTimes to be filled in
+daterange=c(as.POSIXlt(min(T$dateTime)), as.POSIXlt(max(T$dateTime)))
+ts <- seq(daterange[1], daterange[2], by="5 min") 
+ts <- as.data.frame(ts)
+colnames(ts)[1] <- 'dateTime'
+ 
+# add missing dateTime at end of day, replace missing data with zero
+# this leads to a daily pattern of zero values, which is being picked by the code as a seasonal pattern; this is unreasonable
+new_df <- merge(new_df, ts, by='dateTime', all=TRUE)
+new_df$new_T[is.na(new_df$new_T)] <- 0
+
+
+################################################################################################
 ## dealing with NA values : removing rows
 raw_input[raw_input==""] <- NA
 
@@ -69,8 +90,8 @@ sel_dat <- na.locf(sel_dat, fromLast = TRUE)  # for 1st entry, copy from next va
 
 
 
-
-##############################################################################
+##########################################################################################
+###########################################################################################
 ## remove data for shifts which produce multiple IDs on a m/c
 ## for this, combine the date, shift & m/c column, & retain unique rows
 prdcn$DateShiftMc <- paste(prdcn$Date, prdcn$Shift, prdcn$Machine)
