@@ -17,6 +17,9 @@ Which index has NA value?
 summary(df)
 str(df)
 
+## remove rows from a df by row no.
+new_df <- new_df[-c(N1,N2), ]   # where N1, N2 indicate the selected row no.s to be removed
+
 ##################################################################################################
 ## read a specific sheet from a multi-sheet excel
 library(readxl)
