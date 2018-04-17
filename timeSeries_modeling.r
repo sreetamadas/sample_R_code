@@ -23,6 +23,11 @@ fit <- stl(x, "periodic")
 plot(fit)
 
 
+## accessing stl output
+fit
+fit$time.series[,"trend"]  # fit$time.series[,"remainder]
+
+
 # augmented Dickey-Fuller (ADF) test is a formal statistical test for stationarity
 adf.test(x, alternative = "stationary")
 
