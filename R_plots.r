@@ -54,7 +54,9 @@ for(i in 4:ncol(df)) {
 }
 
 ###############################################################################################
-#### control axis labeling
+#### control axis labeling ###
+
+## method 1
 png('newFig.png', h=3000, w=6000 )
 attach(mtcars, warn.conflicts = FALSE)
 par(mfrow=c(17,1))  # no. of rows, no. of col : this creates 17 figs
@@ -70,6 +72,12 @@ for(i in 1:17) {
     #theme(axis.text.x = element_text(angle = 25, vjust = 1.0, hjust = 1.0))
 }
 dev.off()
+
+## method 2: putting ticks at specific positions on axes
+plot(new_df$X, new_df$Y, ylab='Y', xlab='no.', axes=FALSE)
+axis(side = 1, at = c(0, 1, 2, 3))
+axis(side = 2, at = c(9, 11, 13, 15))
+box()
 
 
 #################################################################################################
