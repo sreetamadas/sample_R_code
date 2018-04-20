@@ -12,6 +12,11 @@
 ## for this, transform: w_mc$Y_new <- log(w_mc$Y)  ;  w_mc$X_new <- log(w_mc$X)
 
 ## 3. try Y = A + BX, where Y & X have undergone Box-Cox transformation
+# https://www.analyticsvidhya.com/blog/2016/01/guide-data-exploration/
+# https://www.isixsigma.com/tools-templates/normality/making-data-normal-using-box-cox-power-transformation/
+# http://rcompanion.org/handbook/I_12.html
+# http://seismo.berkeley.edu/~kirchner/eps_120/Toolkits/Toolkit_03.pdf
+
 ###  use the following lines of code in appropriate place  ###
 # Box-Cox transform
 # library(fpp)  
