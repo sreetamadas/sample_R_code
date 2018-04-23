@@ -126,6 +126,8 @@ for (id in 1:length(IDlist_event)) {
   sel_dat <- cbind(sel_dat,timedel)  ## add the time differences column to the dataframe
   sel_dat$timedel[is.na(sel_dat$timedel)] <- 0  ## this is to take care of entries where the dateTime was modified to date (see above)
   
+  
+  
   ### calculate ON & Off time for each instance
   sel_dat$to <- as.numeric(sel_dat$to)
   sel_dat$from <- as.numeric(sel_dat$from)
@@ -146,6 +148,18 @@ for (id in 1:length(IDlist_event)) {
       }
   }
 
+
+# assign a new no. for each change of state
+sel_dat$entry[1] <- 1
+cnt <- 1
+for (i in 2:nrow(sel_dat) ) {
+   if(sel_dat$state[i] != sel_dat$state[i-1]) {
+      cnt <- cnt + 1
+  }
+  sel_dat$entry[i] <- cnt
+} 
+  
+  
 ###########################################################################################
 ## calculate features for hourly data
   sel_dat$dateHr <- format(as.POSIXct(sel_dat$dateTime, format='%Y-%m-%d %H:%M:%S'), format='%Y-%m-%d %H')
