@@ -14,3 +14,5 @@ model_TotalProd$csum <- cumsum(model_TotalProd$c)      # calculate cumulative su
 #  model_TotalProd$csum <- ave(model_TotalProd$totalProd, model_TotalProd$Model, FUN=cumsum) # this is giving cumsum fo each model, not useful here
 
                
+## calculate cumulative sum for each successive value of a factor
+T$csum_time <- ave(T$timedel, T$entry, FUN=cumsum)
