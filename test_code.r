@@ -215,8 +215,10 @@ num_of_instances <- tapply(df$someVariable, df$ID, function(x) length(unique(x))
 ## use length(unique(x))  or length(x) according to need/ context
 new_df <- cbind(new_df, total, sd_T)
 ## remove NA values
-new_df <- new_df[complete.cases(new_df),]             
-             
+new_df <- new_df[complete.cases(new_df),]    
+                           
+## calculate cumulative value for successive values of each ID/ factor variable                            
+T$csum_time <- ave(T$timedel, T$ID, FUN=cumsum)             
 
 ## method 2: as list             
 idList <-  as.character(sort(unique(df$ID))) ## get unique IDs in column
