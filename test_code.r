@@ -71,7 +71,6 @@ dat <- merge(w_mc, df_avg, by = "DateTime")    # inner join
 #DF1$Activity <- ifelse(DF2$NAME == DF1$NAME, DF2$Activity, NA)
 df$from <- ifelse(df$to == 0, 1, 0)  # meaning: if to==0,from = 1; if to==1, from=0
 
-######################################################################################################
 ##### calculate new col based on condition
 # NAs introduced by coercion since the numerator & denominator are blank for some rows
 # so use the if-else condition
@@ -90,7 +89,9 @@ for (i in 1:nrow((prdf))) {
 1. create a dataframe with the columns (from each row) which should be included in the calculation
 2. run the following code on it
 
-df <- data.frame(subset$XA, subset$XB, subset$XC)	# creating data frame
+df <- data.frame(df2$XA, df2$XB, df2$XC)	# creating data frame by column name
+df <- df2[,c(5,15:ncol(df2))]                     # creating data frame by column no.
+
 df$min=apply(df,1,function(x) min(x))				      # select min in the row
 df$max=apply(df,1,function(x) max(x))				      # select max in the row
 df$diff <- 0.04*df$min - (df$max - df$min)				# calculation on selected data
