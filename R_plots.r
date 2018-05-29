@@ -348,11 +348,18 @@ corrplot(t(mat),is.corr = FALSE, method='square')
 heatmap(t(mat), Colv = F) #, scale= 'none')
 # method 3
 library(RColorBrewer)
-corrplot(t(mat),is.corr = FALSE, method='color', col=brewer.pal(n=9, name='Blues'))
+corrplot(t(mat),is.corr = FALSE, method='color', col=brewer.pal(n=9, name='Blues'), title='xx', mar=c(0,0,5,0), tl.cex=1.2, cl.cex=1.8) 
+# can also use: method='square', & remove the 'col' option above
 # method 4
 library(plotrix)
 color2D.matplot(t(mat), show.legend=FALSE,do.hex=FALSE,axes=TRUE,show.values=FALSE) 
 #color2D.matplot(t(mat),c(1,0),c(0,1),c(0,0), show.legend=FALSE,do.hex=FALSE,axes=TRUE,show.values=FALSE) 
+
+# for use in correlation plot & not as heatmap
+t <- d[,c(5,9,15:ncol(d))]  # select numeric cols
+library(corrplot)
+t <- t[,apply(t, 2, var, na.rm=TRUE) != 0]  # remove NA values, & cols with variance = 0
+corrplot(cor(t),type="lower", method="color", tl.cex=0.6, cl.cex=0.8)
 
 
 ###############################################################
