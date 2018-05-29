@@ -1,3 +1,10 @@
+# https://www.r-bloggers.com/reshape-and-aggregate-data-with-the-r-package-reshape2/
+# https://www.r-bloggers.com/introducing-tidyr/
+# https://www.r-bloggers.com/melt/
+# https://rpubs.com/bradleyboehmke/data_wrangling
+# spread in tidyr, how to use melt in R , how to use cast in reshape in r
+
+
 ## convert from long to wide
 ## sample data
 # datetime    sno    to
