@@ -1,4 +1,6 @@
 ## select important attributes using Random forest Classification, regression forest ctree and rtree
+## also, see python code folder
+
 
 ## read in data
 
