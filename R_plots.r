@@ -1,4 +1,4 @@
-##################################################
+######################################################################################
 ##### plots in R: base graphics, ggplot #####
 # venn diagram
 # pie chart 
@@ -9,8 +9,9 @@
 # bubblePlot
 # heatmap & matrices
 # multiple plots, dual axes, facet wrap & grid, cowplot, shape & color changes
+######################################################################################
+#####################################################################################
 
-#####################################################################
 ### set the layout of a plot 
 # method 1: in base graphics (for multiple plots)
 png('figure1.png', h=1200, w=2600 )
@@ -152,9 +153,16 @@ ggplot(data=new_df, aes(as.Date(new_df$date), new_df$Y, colour=as.factor(new_df$
 
 
 ### scatter plot for all variables in a datafarme
-new <- df[,5:8]  # save columns 5-8 with numeric data fram df
+new <- df[,5:8]  # save columns 5-8 with numeric data fram df  ; # new <- df[,c(2,9,15:ncol(df))]
 pairs(new)  # plots the paired scatterplots
 cor(new)  # check correlation among the variables
+
+# method 2
+for (i in 1:ncol(new)) {
+  plot(new$Y, new[,i], col=as.factor(new$Machine), xlab = 'kpi', ylab=colnames(new[i]))
+}
+
+
 
 
 ### 2D scatter plot with transparency  ###
@@ -167,6 +175,8 @@ plot(df$x, df$y, col=rgb(0,100,0,50,maxColorValue=255), pch=16, xlab="X", ylab="
 library(ggplot2)
 ggplot(data=df, aes(df$ab, df$bc, color=fac)) + geom_point(alpha=0.3) +
     labs(x="var A-B", y="var B-C")   
+
+
 
 
 ### 3D scatterplots ###
@@ -196,6 +206,7 @@ scatter3d(df$X, df$Y, df$size)
 
 
 
+
 ### histogram & density plots ###
 # method 1
 hist(df$y, xlab="var. Y", breaks=seq(0,175,by=5), cex.main=1.5, cex.lab=1.5, cex.axis=1.5)  # changing label size
@@ -207,6 +218,8 @@ qplot(df$y, geom="histogram", binwidth=2, xlab="var.Y)")+
   xlim(min(df$y), (min(df$y) + 150))  
 # density plot in ggplot
 qplot(df$y, geom="density", xlab="var.Y")
+
+
 
 
 ### boxplot (comparison of variables X, Y, Z in dataframes l0, lL, lM, lH, lvH)  ###
@@ -306,6 +319,8 @@ ggplot(df, aes(x= reorder(df$Model,-df$value), df$value, fill=df$value)) +
   labs(x='model', y='value')
 
 
+
+
 ### stacked barchart  ###
 ## create stacked bars for: multiple shifts data (for a continuous var.) on a date & for multiple categorical variables
 # method 1
@@ -330,6 +345,7 @@ radius <- sqrt( df$size/ pi )
 symbols(df$X, df$Y, circles=radius)
 #symbols(df$X, df$Y, circles=radius, bg=as.numeric(df$X))
 symbols(df$X, df$Y, circles=radius, bg=as.numeric(df$size), xlab= "bin", ylab= "SD")
+
 
 
 ### plot a matrix z by color ###
