@@ -23,8 +23,9 @@ colnames(df) <- c("t_ON","e_per_tON","s_per_tON")
 # https://www.statmethods.net/advstats/cluster.html
 # https://stat.ethz.ch/R-manual/R-devel/library/stats/html/kmeans.html   <- see for random selection of initial cluster centres
 wss <- (nrow(df)-1)*sum(apply(df,2,var))
-for (i in 2:15) wss[i] <- sum(kmeans(df, centers=i)$withinss)
-plot(1:15, wss, type="b", xlab="Number of Clusters", ylab="Within groups sum of squares")
+n_clust <- 15  ## SPECIFY NO> OF CLUSTERS
+for (i in 2:n_clust) wss[i] <- sum(kmeans(df, centers=i)$withinss)
+plot(1:n_clust, wss, type="b", xlab="Number of Clusters", ylab="Within groups sum of squares")
 
 
 ### K-Means Cluster Analysis (, or any other method ? ********) 
