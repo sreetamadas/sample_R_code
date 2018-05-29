@@ -6,7 +6,7 @@ setwd("C:/Users/Desktop/data/analysis/")
 # read data
 df <- read.csv()
 
-# clean data
+# clean data - check & fix missing values & outliers
 # subset, if required
 # correct date & time formats; add day of week & time of day, if reqd
 
