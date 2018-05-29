@@ -21,7 +21,10 @@ str(df)
 new_df <- new_df[-c(N1,N2), ]   # where N1, N2 indicate the selected row no.s to be removed
 
 ## create an empty df & populate
+#https://stackoverflow.com/questions/10689055/create-an-empty-data-frame
 new_df <- data.frame(entry=numeric(),
+                     id=character(),  # factor
+                     datapts=integer(),
                      startTime=as.POSIXct(character()), #as.Date(character()), #character(),
                      startTemp=numeric(),
                      endTime=as.POSIXct(character()),  #as.Date(character()), #character(),
