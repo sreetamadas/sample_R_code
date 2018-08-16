@@ -220,7 +220,8 @@ qplot(df$y, geom="histogram", binwidth=2, xlab="var.Y)")+
 qplot(df$y, geom="density", xlab="var.Y")
 
 # density plot for 7 groups
-ggplot(long, mapping = aes(fill = long$variable, x = long$value)) + geom_density(alpha = .5) + scale_fill_manual(values = c("yellow", "red", "cyan","blue","orange","pink","green"))
+ggplot(long, mapping = aes(fill = long$variable, x = long$value)) + geom_density(alpha = .5) 
+    + scale_fill_manual(values = c("yellow", "red", "cyan","blue","orange","pink","green"))
 
 
 ### boxplot (comparison of variables X, Y, Z in dataframes l0, lL, lM, lH, lvH)  ###
