@@ -1,0 +1,256 @@
+## columns which can be dropped:
+'Destination Country Code','Destination Country Name','Destination Region Name',
+'Destination State-Province Code','Issuing Country Code','Local Currency Code',
+'Origin Country Code','Origin State-Province Code','Ticket Status Description',
+'Tickets Used','Total Travel Time','Transaction Count (Air + Rail)','Travel Type Description'
+
+
+## grouping and summing shows the top-routes to be as follows:
+# 1. Boston - Chicago
+# 2. Boston - San diego
+# 3. Boston - Washington
+# 4. New York - Chicago
+# 5. New York - Boston
+
+Destination City Name   Origin City Name    count
+BOSTON                    CHICAGO          1771 
+CHICAGO                   BOSTON            844 
+SAN DIEGO                 BOSTON            382 
+WASHINGTON                BOSTON            370 
+BOSTON                    SAN DIEGO         362 
+NEW YORK                  CHICAGO           325 
+NEW YORK                  BOSTON            277 
+CHICAGO                   NEW YORK          217 
+BOSTON                    NEW YORK          198 
+BOSTON                    WASHINGTON        107
+
+
+
+# original dataframe has 19323 entries
+ we subset the data for these selected origin & destination cities, 
+eliminate the cases labeled 'N' in 'Air-Rail Without Hotel', as they possibly indicate fares with Hotel price included,
+use entries with Tickets Issued == 1; remove Tickets Issued == 0
+drop columns 'Air-Rail Without Hotel','Tickets Issued'
+remove days(=1) with booking date after departure date
+eliminate 7 data points with -ve values of base, local & lowest fare
+remove rows with NA
+# finally, left with 1921 entries
+
+
+## create new features:
+travel month , 
+travel_day_of_week, 
+number of days between booking and departure dates
+number of days between booking and return dates
+
+
+# creating a new file : "top_5_route_data.xls"
+
+
+## on this file, I create train & test sets & run Regression Forest model with different combination of hyper-parameters, input attributes & cross-validation.
+## xgboost was also tried
+
+# RF performs better than xgBoost; however, the error is large and other models can be tried
+
+
+### sample prediction ####
+for BOSTON- NEW YORK Route: create a new dataframe with different combinations of airports for New York, different month, day of week, 
+number of days between booking and departure dates & number of days between booking and return dates.
+
+following are the predictions:
+Travel month      range of ticket price
+1                   227.2 - 359.2
+2                   188.6 - 289.4
+3                   166.3 - 318.2
+4                   338.8 - 488.2
+5                   239.8 - 312.1
+6                   187.5 - 295.7
+7                   249.8 - 378.5
+8                   212.6 - 254.1
+9                   151.4 - 247.5
+10                  245.4 - 333.7
+11                  219.4 - 277.9
+12                  150.3 - 218.6
+
+
+#####################################################################################################################################
+#####################################################################################################################################
+ntree =1501
+mtry=2
+fmla12
+Local_Paid_Fare ~ Destination_Airport_Code + Destination_City_Name + 
+    Origin_Airport_Code + Origin_City_Name + travel_month + travel_day + 
+    book_dep_time + book_ret_time
+
+[1] "fold  1 , RMSE (test): 273.106663378411 , r2 (test): 0.0906183448547351 , RMSE <train>:  152.621657500142 , r2 <train>;  0.292062079140732"
+[1] "fold  2 , RMSE (test): 149.010783653724 , r2 (test): 0.157326997787993 , RMSE <train>:  166.896393070963 , r2 <train>;  0.301408313095116"
+[1] "fold  3 , RMSE (test): 170.11173384505 , r2 (test): -0.0741817436443928 , RMSE <train>:  165.811522763758 , r2 <train>;  0.300526539123273"
+[1] "fold  4 , RMSE (test): 244.0640790598 , r2 (test): 0.162250639295291 , RMSE <train>:  152.797201727062 , r2 <train>;  0.324456006269971"
+[1] "fold  5 , RMSE (test): 134.906375027011 , r2 (test): 0.0864128029432164 , RMSE <train>:  166.473307941879 , r2 <train>;  0.317285519277922"
+[1] "fold  6 , RMSE (test): 126.805580229096 , r2 (test): 0.309389347158354 , RMSE <train>:  168.031070547191 , r2 <train>;  0.291100414622648"
+[1] "fold  7 , RMSE (test): 169.127020138243 , r2 (test): 0.020104284191366 , RMSE <train>:  163.772164250285 , r2 <train>;  0.319379217390353"
+[1] "fold  8 , RMSE (test): 148.738044157588 , r2 (test): 0.298653499958635 , RMSE <train>:  166.645145654026 , r2 <train>;  0.29293771770628"
+[1] "fold  9 , RMSE (test): 144.428973697787 , r2 (test): -0.207409088552125 , RMSE <train>:  168.977468786776 , r2 <train>;  0.285042341757255"
+[1] "fold  10 , RMSE (test): 154.959940923561 , r2 (test): 0.240226932197096 , RMSE <train>:  165.765727827939 , r2 <train>;  0.300815452686825"
+> print(paste("avg RMSE: ", mean(err.vect)))     ## use for regression
+[1] "avg RMSE:  171.525919411027"
+
+
+
+ntree = 1001 
+mtry = 5
+
+
+fmla4 = as.formula(paste("Local_Paid_Fare ~ ", paste(colnames(tt)[2:18], collapse='+')))
+Local_Paid_Fare ~ Air_Booking_Description + Airline_Alliance + 
+    Booking_Method_Description + Destination_Airport_Code + Destination_City_Name + 
+    E_Ticket + Main_Airline_Code + Origin_Airport_Code + Origin_City_Name + 
+    Overnight_Eligible + Routing_Type_Name + Ticket_Class_Description + 
+    travel_month + travel_day + Total_Travel_Time_in_Minutes + 
+    book_dep_time + book_ret_time
+
+[1] "fold  1 , RMSE (test): 253.910642471918 , r2 (test): 0.213962247915111 , RMSE <train>:  129.254852424762 , r2 <train>;  0.492242254717049"
+[1] "fold  2 , RMSE (test): 116.805999996502 , r2 (test): 0.482209609329576 , RMSE <train>:  140.09188376809 , r2 <train>;  0.507784300349963"
+[1] "fold  3 , RMSE (test): 131.206780491653 , r2 (test): 0.360969211585286 , RMSE <train>:  139.747781181669 , r2 <train>;  0.503142707794172"
+[1] "fold  4 , RMSE (test): 216.436906845944 , r2 (test): 0.341176606498375 , RMSE <train>:  128.756923302813 , r2 <train>;  0.520306298154602"
+[1] "fold  5 , RMSE (test): 108.596704894295 , r2 (test): 0.40800456911356 , RMSE <train>:  139.668607117406 , r2 <train>;  0.519440131673075"
+[1] "fold  6 , RMSE (test): 116.025453145373 , r2 (test): 0.421819968458393 , RMSE <train>:  140.890179004451 , r2 <train>;  0.501612690291568"
+[1] "fold  7 , RMSE (test): 132.389136488448 , r2 (test): 0.399575280685716 , RMSE <train>:  138.415477558597 , r2 <train>;  0.513823077262162"
+[1] "fold  8 , RMSE (test): 156.554358099284 , r2 (test): 0.223003925050978 , RMSE <train>:  137.8229741688 , r2 <train>;  0.516367395582254"
+[1] "fold  9 , RMSE (test): 127.820346903609 , r2 (test): 0.0543165820327349 , RMSE <train>:  141.272835184952 , r2 <train>;  0.500264681540649"
+[1] "fold  10 , RMSE (test): 137.623867068369 , r2 (test): 0.400716218943602 , RMSE <train>:  139.269891714414 , r2 <train>;  0.506466306153128"
+
+[1] "avg RMSE:  149.73701964054"
+
+
+
+fmla5
+Local_Paid_Fare ~ Air_Booking_Description + Airline_Alliance + 
+    Booking_Method_Description + Destination_Airport_Code + Destination_City_Name + 
+    E_Ticket + Main_Airline_Code + Origin_Airport_Code + Origin_City_Name + 
+    Overnight_Eligible + Routing_Type_Name + travel_month + travel_day + 
+    Total_Travel_Time_in_Minutes + book_dep_time + book_ret_time
+
+[1] "fold  1 , RMSE (test): 253.567319474117 , r2 (test): 0.216086478606231 , RMSE <train>:  128.322304462187 , r2 <train>;  0.499542565808067"
+[1] "fold  2 , RMSE (test): 116.937972432882 , r2 (test): 0.481038904695041 , RMSE <train>:  139.351856408562 , r2 <train>;  0.512970767998494"
+[1] "fold  3 , RMSE (test): 131.292668256541 , r2 (test): 0.360132320538931 , RMSE <train>:  139.48494633959 , r2 <train>;  0.505009908832655"
+[1] "fold  4 , RMSE (test): 213.448781529644 , r2 (test): 0.359242446860025 , RMSE <train>:  128.509619708908 , r2 <train>;  0.522147225182418"
+[1] "fold  5 , RMSE (test): 108.547889542966 , r2 (test): 0.408536665734562 , RMSE <train>:  140.455826260244 , r2 <train>;  0.514007671723187"
+[1] "fold  6 , RMSE (test): 116.225473897369 , r2 (test): 0.419824756432279 , RMSE <train>:  139.231557433068 , r2 <train>;  0.513278090767633"
+[1] "fold  7 , RMSE (test): 132.716863571906 , r2 (test): 0.396598918659747 , RMSE <train>:  137.939440190664 , r2 <train>;  0.517161438061655"
+[1] "fold  8 , RMSE (test): 150.169550471332 , r2 (test): 0.285088533669738 , RMSE <train>:  138.44958881495 , r2 <train>;  0.511959709720518"
+[1] "fold  9 , RMSE (test): 128.802725136266 , r2 (test): 0.0397244006038292 , RMSE <train>:  141.317829469411 , r2 <train>;  0.499946307329099"
+[1] "fold  10 , RMSE (test): 140.346276468514 , r2 (test): 0.376772224807896 , RMSE <train>:  138.297176973733 , r2 <train>;  0.51333629082358"
+
+[1] "avg RMSE:  149.205552078154"
+
+
+
+fmla6
+Local_Paid_Fare ~ Airline_Alliance + Booking_Method_Description + 
+    Destination_Airport_Code + Destination_City_Name + E_Ticket + 
+    Main_Airline_Code + Origin_Airport_Code + Origin_City_Name + 
+    Overnight_Eligible + Routing_Type_Name + travel_month + travel_day + 
+    Total_Travel_Time_in_Minutes + book_dep_time + book_ret_time
+
+[1] "fold  1 , RMSE (test): 250.878663909922 , r2 (test): 0.232622515560077 , RMSE <train>:  129.508906340339 , r2 <train>;  0.490244269878417"
+[1] "fold  2 , RMSE (test): 120.164076344548 , r2 (test): 0.452009552719119 , RMSE <train>:  139.987193982268 , r2 <train>;  0.508519684881638"
+[1] "fold  3 , RMSE (test): 132.413652796656 , r2 (test): 0.349159219253034 , RMSE <train>:  140.098509991231 , r2 <train>;  0.500645625688206"
+[1] "fold  4 , RMSE (test): 211.484144545663 , r2 (test): 0.370983554605124 , RMSE <train>:  130.366046378149 , r2 <train>;  0.508241556949979"
+[1] "fold  5 , RMSE (test): 109.296094683252 , r2 (test): 0.400354819411387 , RMSE <train>:  140.332710052189 , r2 <train>;  0.514859289071163"
+[1] "fold  6 , RMSE (test): 117.237911138195 , r2 (test): 0.40967294758389 , RMSE <train>:  140.300030170202 , r2 <train>;  0.505779150918024"
+[1] "fold  7 , RMSE (test): 134.176104140935 , r2 (test): 0.383257012221836 , RMSE <train>:  138.833918854594 , r2 <train>;  0.510879128972423"
+[1] "fold  8 , RMSE (test): 139.857565753318 , r2 (test): 0.379901856329679 , RMSE <train>:  139.949765856243 , r2 <train>;  0.501326042249445"
+[1] "fold  9 , RMSE (test): 134.630998671391 , r2 (test): -0.0491459896441833 , RMSE <train>:  140.445182184927 , r2 <train>;  0.506102971208982"
+[1] "fold  10 , RMSE (test): 146.182001571225 , r2 (test): 0.323865932616911 , RMSE <train>:  136.961379916235 , r2 <train>;  0.522692149280875"
+
+[1] "avg RMSE:  149.632121355511"
+
+
+
+fmla7
+Local_Paid_Fare ~ Booking_Method_Description + Destination_Airport_Code + 
+    Destination_City_Name + E_Ticket + Main_Airline_Code + Origin_Airport_Code + 
+    Origin_City_Name + Overnight_Eligible + Routing_Type_Name + 
+    travel_month + travel_day + Total_Travel_Time_in_Minutes + 
+    book_dep_time + book_ret_time
+
+[1] "fold  1 , RMSE (test): 251.651136277685 , r2 (test): 0.227889626005108 , RMSE <train>:  129.147853482942 , r2 <train>;  0.493082564431654"
+[1] "fold  2 , RMSE (test): 120.671889794776 , r2 (test): 0.447368150273167 , RMSE <train>:  140.243395995084 , r2 <train>;  0.50671904199356"
+[1] "fold  3 , RMSE (test): 131.093781306174 , r2 (test): 0.362069442284242 , RMSE <train>:  139.724124215219 , r2 <train>;  0.503310912846205"
+[1] "fold  4 , RMSE (test): 212.631123353684 , r2 (test): 0.36414214370582 , RMSE <train>:  130.152463745853 , r2 <train>;  0.509851562436139"
+[1] "fold  5 , RMSE (test): 110.600495671147 , r2 (test): 0.385956404854327 , RMSE <train>:  140.066902824718 , r2 <train>;  0.516695379602905"
+[1] "fold  6 , RMSE (test): 117.136803500745 , r2 (test): 0.41069072136951 , RMSE <train>:  140.025693877847 , r2 <train>;  0.507710015209962"
+[1] "fold  7 , RMSE (test): 133.781192425723 , r2 (test): 0.386882107868419 , RMSE <train>:  138.479475105719 , r2 <train>;  0.513373397442968"
+[1] "fold  8 , RMSE (test): 139.63881473981 , r2 (test): 0.381840128513368 , RMSE <train>:  139.914579191985 , r2 <train>;  0.501576767460667"
+[1] "fold  9 , RMSE (test): 135.049805309416 , r2 (test): -0.0556834547082734 , RMSE <train>:  141.058708663354 , r2 <train>;  0.501778426071239"
+[1] "fold  10 , RMSE (test): 147.348044524383 , r2 (test): 0.313036339947361 , RMSE <train>:  136.625772208001 , r2 <train>;  0.525028456535687"
+
+[1] "avg RMSE:  149.960308690354"
+
+
+fmla7 + ntree=1501
+[1] "fold  1 , RMSE (test): 251.799457600418 , r2 (test): 0.226979205472859 , RMSE <train>:  129.477565798816 , r2 <train>;  0.490490956967623"
+[1] "fold  2 , RMSE (test): 120.1479019075 , r2 (test): 0.452157065032951 , RMSE <train>:  139.636102351077 , r2 <train>;  0.510981884956084"
+[1] "fold  3 , RMSE (test): 131.10561576842 , r2 (test): 0.361954259004104 , RMSE <train>:  140.131566499157 , r2 <train>;  0.500409950672792"
+[1] "fold  4 , RMSE (test): 210.987983945152 , r2 (test): 0.373931549394815 , RMSE <train>:  130.211554182723 , r2 <train>;  0.509406397446883"
+[1] "fold  5 , RMSE (test): 109.940275854347 , r2 (test): 0.393265481303531 , RMSE <train>:  140.227477258259 , r2 <train>;  0.515586611599441"
+[1] "fold  6 , RMSE (test): 116.702533312907 , r2 (test): 0.415052203818419 , RMSE <train>:  140.382998106099 , r2 <train>;  0.505194452427259"
+[1] "fold  7 , RMSE (test): 133.321773340939 , r2 (test): 0.391085903623345 , RMSE <train>:  138.508851011385 , r2 <train>;  0.513166917552962"
+[1] "fold  8 , RMSE (test): 138.723895731687 , r2 (test): 0.389914006990225 , RMSE <train>:  140.124493317698 , r2 <train>;  0.500080074792101"
+[1] "fold  9 , RMSE (test): 134.55262004836 , r2 (test): -0.0479247748780853 , RMSE <train>:  140.77174606441 , r2 <train>;  0.503803476954917"
+[1] "fold  10 , RMSE (test): 146.647710128329 , r2 (test): 0.31955099652025 , RMSE <train>:  137.144426413749 , r2 <train>;  0.521415469470976"
+> print(paste("avg RMSE: ", mean(err.vect)))     ## use for regression
+[1] "avg RMSE:  149.392976763806"
+
+
+fmla9 + ntree=1501
+Local_Paid_Fare ~ Booking_Method_Description + Destination_Airport_Code + 
+    Destination_City_Name + E_Ticket + Main_Airline_Code + Origin_Airport_Code + 
+    Origin_City_Name + Overnight_Eligible + Routing_Type_Name + 
+    travel_month + travel_day + book_dep_time + book_ret_time
+
+[1] "fold  1 , RMSE (test): 261.739114345529 , r2 (test): 0.164745443843337 , RMSE <train>:  130.881211882857 , r2 <train>;  0.479384061440196"
+[1] "fold  2 , RMSE (test): 122.684772777508 , r2 (test): 0.428777890787503 , RMSE <train>:  142.72821062696 , r2 <train>;  0.489084411348896"
+[1] "fold  3 , RMSE (test): 132.764701537759 , r2 (test): 0.345703688870224 , RMSE <train>:  142.143730501344 , r2 <train>;  0.485959610395164"
+[1] "fold  4 , RMSE (test): 217.403321015173 , r2 (test): 0.335280036171315 , RMSE <train>:  131.255658686649 , r2 <train>;  0.501507180490958"
+[1] "fold  5 , RMSE (test): 112.596089875685 , r2 (test): 0.363597792846738 , RMSE <train>:  141.581868573987 , r2 <train>;  0.506183979403252"
+[1] "fold  6 , RMSE (test): 119.16388842934 , r2 (test): 0.390117917775666 , RMSE <train>:  142.869861660028 , r2 <train>;  0.487508363900336"
+[1] "fold  7 , RMSE (test): 137.775209532857 , r2 (test): 0.349726546161059 , RMSE <train>:  139.449551212376 , r2 <train>;  0.506531686158046"
+[1] "fold  8 , RMSE (test): 142.340000591422 , r2 (test): 0.357693336066693 , RMSE <train>:  141.046665173125 , r2 <train>;  0.493478387178785"
+[1] "fold  9 , RMSE (test): 133.387117965881 , r2 (test): -0.0298490395978175 , RMSE <train>:  142.904943862249 , r2 <train>;  0.488651213972987"
+[1] "fold  10 , RMSE (test): 145.917385273624 , r2 (test): 0.326311571015076 , RMSE <train>:  139.073071938999 , r2 <train>;  0.50786026935947"
+> print(paste("avg RMSE: ", mean(err.vect)))     ## use for regression
+[1] "avg RMSE:  152.577160134478"
+
+
+
+fmla8 + ntree=1501   (dropped E_Ticket; Overnight_Eligible)
+Local_Paid_Fare ~ Booking_Method_Description + Destination_Airport_Code + 
+    Destination_City_Name + Main_Airline_Code + Origin_Airport_Code + 
+    Origin_City_Name + Routing_Type_Name + travel_month + travel_day + 
+    Total_Travel_Time_in_Minutes + book_dep_time + book_ret_time
+
+
+[1] "fold  1 , RMSE (test): 251.980627380479 , r2 (test): 0.225866427939877 , RMSE <train>:  132.846557237768 , r2 <train>;  0.463631267858899"
+[1] "fold  2 , RMSE (test): 125.479232705957 , r2 (test): 0.402459437697535 , RMSE <train>:  142.401512478062 , r2 <train>;  0.491420657923212"
+[1] "fold  3 , RMSE (test): 135.605479188403 , r2 (test): 0.317404060916914 , RMSE <train>:  142.129969675242 , r2 <train>;  0.486059133293428"
+[1] "fold  4 , RMSE (test): 219.937470559283 , r2 (test): 0.319693177389388 , RMSE <train>:  131.135361401047 , r2 <train>;  0.502420510298014"
+[1] "fold  5 , RMSE (test): 120.376545359483 , r2 (test): 0.272607514513953 , RMSE <train>:  141.755035059557 , r2 <train>;  0.50497528396687"
+[1] "fold  6 , RMSE (test): 121.984752306036 , r2 (test): 0.360901733866002 , RMSE <train>:  143.391146188972 , r2 <train>;  0.483761718724032"
+[1] "fold  7 , RMSE (test): 139.190283517413 , r2 (test): 0.336300174173145 , RMSE <train>:  141.262528710597 , r2 <train>;  0.493617157941612"
+[1] "fold  8 , RMSE (test): 144.306208154598 , r2 (test): 0.339825824758565 , RMSE <train>:  143.057408966684 , r2 <train>;  0.478933628004268"
+[1] "fold  9 , RMSE (test): 134.120409544606 , r2 (test): -0.0412032907134094 , RMSE <train>:  143.255032184657 , r2 <train>;  0.486142742090825"
+[1] "fold  10 , RMSE (test): 148.215973226156 , r2 (test): 0.304919618865428 , RMSE <train>:  140.099669435977 , r2 <train>;  0.500567784368229"
+> print(paste("avg RMSE: ", mean(err.vect)))     ## use for regression
+[1] "avg RMSE:  154.119698194241"
+
+
+
+Xg-boost
+[1]	train-rmse:273.195496	test-rmse:285.724762 
+Multiple eval metrics are present. Will use test_rmse for early stopping.
+Will train until test_rmse hasn't improved in 50 rounds.
+
+Stopping. Best iteration:
+[11]	train-rmse:84.180618	test-rmse:174.297806
