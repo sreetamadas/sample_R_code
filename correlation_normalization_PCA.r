@@ -17,10 +17,11 @@ t <- t[,apply(t, 2, var, na.rm=TRUE) != 0]  # remove columns with constant, vari
 #str(t)  # shows types of data in different columns
 
 m.pca <- prcomp(t, center = TRUE, scale. = TRUE)   # take PCA
-#print(m.pca)
-plot(m.pca, type='l')
-plot(m.pca$x[,1:2],)
-summary(m.pca)
+#print(m.pca)  # prints the PCs for all the components in the input vector
+summary(m.pca)  # prints importance of the PCs - standard deviation, proportion of variance, & cumulative proportion
+
+plot(m.pca, type='l')  # plots PC vs variance
+plot(m.pca$x[,1:2],)   # plots PC1 vs PC2
 
 #####################################################################################################
 #####  normalize data  #######
