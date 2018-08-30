@@ -5,9 +5,15 @@ cor(numeric_data)           # calculate corr
 library(corrplot)
 corrplot(cor(numeric_data),type="lower", method="color", tl.cex=0.6, cl.cex=0.8)
 
+
+##########################################################################################################
+# how to visualize clustering of multi dimensional data
+# https://stats.stackexchange.com/questions/52625/visually-plotting-multi-dimensional-cluster-data
+
 ##########################################################################################################
 ####  PCA  #####
-             
+# https://www.analyticsvidhya.com/blog/2016/03/practical-guide-principal-component-analysis-python/
+
 t <- d[,c(5,14:ncol(d))]     # take numeric columns only, not factors
 
 #t <- t[, colSums(t != 0) > 0]    # remove columns with only zeroes
