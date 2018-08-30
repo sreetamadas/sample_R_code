@@ -27,15 +27,17 @@ n_clust <- 15  ## SPECIFY NO> OF CLUSTERS
 for (i in 2:n_clust) wss[i] <- sum(kmeans(df, centers=i)$withinss)
 plot(1:n_clust, wss, type="b", xlab="Number of Clusters", ylab="Within groups sum of squares")
 
-# add cluster id & centroid details for each data point
-df <- cbind(df, fit$cluster)#, fit$centers)
-colnames(df)[2] <- 'clust_id'
-df$clust_centroid <- fit$centers[df$clust_id]
 
 ### K-Means Cluster Analysis (, or any other method ? ********) 
 fit <- kmeans(df, 4) # 3 cluster solution
 # get cluster means
 aggregate(df,by=list(fit$cluster),FUN=mean)
+
+
+# add cluster id & centroid details for each data point
+df <- cbind(df, fit$cluster)#, fit$centers)
+colnames(df)[2] <- 'clust_id'
+df$clust_centroid <- fit$centers[df$clust_id]
 
 
 ### Cluster Plot against 1st 2 principal components
@@ -45,6 +47,9 @@ clusplot(df, fit$cluster, color=TRUE, shade=TRUE, labels=2, lines=0)
 # Centroid Plot against 1st 2 discriminant functions
 #library(fpc)
 #plotcluster(df, fit$cluster) 
+
+# how to visualize clustering of multi dimensional data
+# https://stats.stackexchange.com/questions/52625/visually-plotting-multi-dimensional-cluster-data
 
 
 ### 3D plot
