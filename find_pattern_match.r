@@ -1,3 +1,4 @@
+################################################################################################################
 STEPS:
 1. select window (window of 4-groove, or 4 separate windows ?)
 2. use clustering - detect centroid - unshift the level changes  (does not work well if too many levels - this may not be a problem with shorter windows)
