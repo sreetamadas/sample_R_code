@@ -29,6 +29,8 @@ summary(m.pca)  # prints importance of the PCs - standard deviation, proportion 
 plot(m.pca, type='l')  # plots PC vs variance
 plot(m.pca$x[,1:2],)   # plots PC1 vs PC2
 
+smoothScatter(m.pca$x[,1:2])  # gives a smoothened distribution with color-coding by density
+
 #####################################################################################################
 #####  normalize data  #######
 subset=s110[strftime(s110$txtime,'%d',tz = 'UTC')== dateofmonth,]
