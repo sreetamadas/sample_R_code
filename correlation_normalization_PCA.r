@@ -36,3 +36,11 @@ smoothScatter(m.pca$x[,1:2])  # gives a smoothened distribution with color-codin
 subset=s110[strftime(s110$txtime,'%d',tz = 'UTC')== dateofmonth,]
 library(clusterSim)
 Y_z   <- data.Normalization(subset$Y,type="n1",normalization="column")
+
+
+# how to normalize all columns in one go
+scaled_df <- data.frame(scale(df))
+scaled_df <- scaled_df[,!(sapply(scaled_df, function(x) all(is.nan(x))))]
+
+
+
