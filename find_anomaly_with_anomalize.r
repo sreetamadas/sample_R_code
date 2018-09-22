@@ -1,9 +1,11 @@
 ## find anomaly
+# this would work properly with data which are expected to be normally distributed, & not skewed
 #  input to time_decompose should be the reqd col from df
 
 library(tidyverse)
 library(anomalize)
 
+T <- as_tibble(data)
 # https://business-science.github.io/anomalize/
 T %>%
    # decompose into trend, seasonality & remainder
