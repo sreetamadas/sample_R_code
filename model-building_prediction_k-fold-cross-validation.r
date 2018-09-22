@@ -100,10 +100,36 @@ for (i in 1:k) {
   varImpPlot(fit, sort = T, main=paste("Variable Importance, ntree=",fit$ntree,", fold=",i, sep =' '), n.var=15)
   #plot(cv_test$Y, predict(fit, newdata=cv_test), xlab='Y (test)', ylab=paste('Y predicted, fold ',i))
   #abline(a=0, b=1, col='red')
+  
+  
+  ###################################################################
+  ### confusion matrix for classification problem
+  library(caret)
+  conf_mat <- confusionMatrix(data = prediction, #cv_test$predicted.response,  
+                               reference = cv_test$class,
+                               positive = '1')
+   #print(paste('iteration: ',i,sep=''))
+   print(conf_mat)  # conf_mat$table
+   #print('')
+   sensitivity.vec[i] <- conf_mat$byClass[1]
+   specificity.vec[i] <- conf_mat$byClass[2]
+   precision.vec[i] <- conf_mat$byClass[5]
+   recall.vec[i] <- conf_mat$byClass[6]
+   F1.vec[i] <- conf_mat$byClass[7]
+   balanced_acc.vec[i] <- conf_mat$byClass[11]
+  rm(conf_mat,Subset) 
+  ####################################################################
 }
 
 #print(paste("avg AUC: ",mean(err.vect)))     ## use for classification
 print(paste("avg MSE: ", mean(err.vect)))     ## use for regression
+
+print(paste('sensitivity','specificity','precision','recall','F1-measure','balanced_acc', sep=' '))
+for(i in 1:k) {
+   print(paste(sensitivity.vec[i], specificity.vec[i], precision.vec[i], recall.vec[i], F1.vec[i], balanced_acc.vec[i], sep=','))
+}
+print(paste('avg sensitivity','specificity','precision','recall','F1-measure','balanced_acc', sep=' '))
+print(paste(mean(sensitivity.vec), mean(specificity.vec), mean(precision.vec), mean(recall.vec), mean(F1.vec), mean(balanced_acc.vec), sep=','))
 
 
 ########################################  END  #####################################################
