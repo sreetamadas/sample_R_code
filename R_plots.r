@@ -361,7 +361,8 @@ ggplot(data = df, aes(as.POSIXct(df$Date), df$continuous_var, group = df$categor
   geom_bar(stat = "identity", width = 0.5) + labs(x='week',y='avg energy') +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
-## bar Chart for multiple categories without stacking
+## bar Chart for multiple categories without stacking: remove the option: position="dodge" to get stacked chart)
+# https://stackoverflow.com/questions/30023610/how-to-plot-2-categorical-variables-on-x-axis-and-two-continuous-variables-as-f
 ggplot(data = wk_df1, aes(as.POSIXct(df$Date), df$continuous_var, group = df$categorical_var, fill = df$categorical_var)) +
   geom_bar(stat = "identity", width = 0.5, position = "dodge") + labs(x='week',y='avg energy') +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
