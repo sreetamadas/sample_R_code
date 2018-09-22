@@ -521,7 +521,8 @@ legend("bottomleft",col=c("red","blue","green","black"),lty=1,legend=c("Y1","Y2"
 ggplot(data = df, aes(df$date, df$Y1, group = df$Id, fill = df$Id)) +
   geom_bar(stat = "identity", width = 0.5) + labs(x='day',y='var Y1') +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-  scale_x_continuous(breaks=seq(1,28, by=2)) + 
+  #scale_x_continuous(breaks=seq(1,28, by=2)) + 
+  scale_x_date(date_breaks = '2 days') + 
   geom_line(aes(y = df$Y2/4, group = 1), color = 'black') + #, size=0.8   ## divide by 4 to scale to similar values as Y1 -> easy to plot
   geom_text(aes(y = df$Y2/4, label = round(df$Y2, 2)), vjust = 1.4, color = "black", size = 3) +
   scale_y_continuous(sec.axis = sec_axis(trans = ~ .*4 , name="var Y2"))  ## do inverse operation (here, multiply) of the operation above
