@@ -37,7 +37,7 @@ aggregate(df,by=list(fit$cluster),FUN=mean)
 # add cluster id & centroid details for each data point
 df <- cbind(df, fit$cluster)#, fit$centers)
 colnames(df)[2] <- 'clust_id'
-df$clust_centroid <- fit$centers[df$clust_id]
+df$clust_centroid <- fit$centers[df$clust_id]  # this won't work if the centroid is a vector & not a scalar
 
 
 ### Cluster Plot against 1st 2 principal components
