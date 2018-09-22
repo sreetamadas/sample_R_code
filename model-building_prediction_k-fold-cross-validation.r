@@ -66,6 +66,15 @@ for (i in 1:k) {
   #fit <- svm(fmla, cv_train, type="nu-regression", kernel="radial")
   # fit <- lm(Y ~ x1 + x2, cv_train)
   
+  ## error vs #trees
+  # GOOGLE: random forest error plot
+  # https://stats.stackexchange.com/questions/51629/multiple-curves-when-plotting-a-random-forest
+  #plot(fit2)
+  # fit$importance
+  #summary(fit)
+  #importance(fit)
+  # varImpPlot(fit, sort = T, main=paste("Variable Importance, ntree=",fit$ntree,", fold=",i, sep =' '), n.var=15)
+  
   # predict using model
   # prediction <- (fit, newdata=cv_test[,-1], type="prob")[,2]   ## use for classification problem
   prediction <- predict(fit, newdata=cv_test)  ## use for random forest regression
