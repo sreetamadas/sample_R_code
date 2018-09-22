@@ -176,15 +176,25 @@ colnames(tmp_df)[1] <- "time"
 colnames(df) <- c("time","col1","col2","Y1","Y2")
 names(df)[names(df) == "oldColumnName"] <- "NewColumnName"
              
+# replace spaces or '-' with '_' in column names: otherwise, R cant read column name correctly
+#colnames(t)[1] <- 'Local_Paid_Fare'
+names(t) <- gsub(" ", "_", names(t))  
+names(t) <- gsub("-", "_", names(t))             
+             
              
 ### remove columns of a dataframe
 df$col_to_remove <- NULL
 df <- df[ , !names(df) %in% c("col1","col2","col3","col5")] ## works as expected
               
 ## reorder df columns
-dat <- dat[c("time", "col3", "col5","col2","col1","col4")]  # reorder by column name             
+dat <- dat[c("time", "col3", "col5","col2","col1","col4")]  # reorder by column name
              
-###########################################################################
+#####################################################################################################   
+# replace spaces in character strings in multiple columns
+cols <- c(2:13)    ##t[cols] <- gsub(" ", '_', t[cols])   #[t == " "] <- "_"
+t[cols] <- as.data.frame(apply(t[cols],2,function(x)gsub('\\s+', '_',x)))             
+             
+#####################################################################################################
 ## fill in rows corresponding to added timestamps
 #library(padr)  pad(a)
 library(zoo)             
@@ -203,7 +213,15 @@ fac2 <- cut(df$Y, c(-10, 5, 30, 60, 100, 500),labels=c('off','low','medium','hig
 df <- cbind(df,fac2)
 
 new_factor <- factor(df$data, levels=c("A","B","AB","O"), labels=c("BT_A","BT_B","BT_AB","BT_O"))
-
+                               
+ 
+##########################################################################################################                               
+# convert selected columns to factor
+cols <- c(2:16)
+t[cols] <- lapply(t[cols], factor)
+summary(t)
+str(t)
+                               
 #######################################################################################################
 ##### assign values to columns by factors ######
 df$score[df$fac2 == 'low'] <- 60
@@ -220,6 +238,8 @@ num_of_instances <- tapply(df$someVariable, df$ID, function(x) length(unique(x))
 ## use length(unique(x))  or length(x) according to need/ context
                            
 new_df <- cbind(new_df, total, sd_T)
+
+                           
 ## remove NA values
 new_df <- new_df[complete.cases(new_df),]    
                            
@@ -253,7 +273,7 @@ min_ab <- tapply(df$ab, df$fac, FUN=min)
 tmp_df <- cbind(tmp_df, sd_ab, max_ab, min_ab) 
 
 #######################################################################################################
-### convert a datafarme to a matrix ; can be done only for columns (here, 5-19 of df) which have numerical data
+### convert a dataframe to a matrix ; can be done only for columns (here, 5-19 of df) which have numerical data
 mattest <- matrix(as.numeric(unlist(testdf[5:19])),nrow=nrow(testdf))  # nrow gives no. of rows in matrix
 colnames(mattest) <- c(1:15)                    
              
