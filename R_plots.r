@@ -146,8 +146,9 @@ ggplot(data=df, aes(as.POSIXct(df$time), df$y)) + geom_point(size=0.2, colour=as
 # formatting date time breaks on X-axis
 library(scales)
 ggplot(data=new_df, aes(as.Date(new_df$date), new_df$Y, colour=as.factor(new_df$id))) + 
-  geom_point() + geom_line() + coord_cartesian(ylim=c(0,21000)) + labs(x='', y='energy (kWh)') + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + scale_x_date(date_breaks = '1 week') #+
+  geom_point() + geom_line() + labs(x='', y='energy (kWh)') + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + scale_x_date(date_breaks = '1 week') +
+  coord_cartesian(ylim=c(0,21000))  ## specify extent of axes
   # expand_limits(y=0) # Make sure to include 0 in the y axis
   # expand_limits(y=c(0,10)) # Make sure to include 0,10 in the y axis
 
