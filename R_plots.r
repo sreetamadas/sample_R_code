@@ -152,9 +152,27 @@ ggplot(data=new_df, aes(as.Date(new_df$date), new_df$Y, colour=as.factor(new_df$
   # expand_limits(y=c(0,10)) # Make sure to include 0,10 in the y axis
 
 
-### scatter plot for all variables in a datafarme
+
+
+### show (density) distribution of variables in a dataframe, by factor
+library(caret)
+x <- df[,2:10]   # also, check with dTraining & dTest
+y <- df[,11]
+scales <- list(x=list(relation="free"), y=list(relation="free"))
+# the above results in plots with individual scales for each var; remove this option to plot on the same scale for all
+featurePlot(x=x, y=y, plot="density", scales=scales)
+
+
+
+### SCATTER plot for ALL variables in a dataframe : distribution of pairwise variables ###
 new <- df[,5:8]  # save columns 5-8 with numeric data fram df  ; # new <- df[,c(2,9,15:ncol(df))]
 pairs(new)  # plots the paired scatterplots
+# https://rstudio-pubs-static.s3.amazonaws.com/12556_4e02f5564dc24b57b7a8f6d95d2a5cf7.html
+# http://www.sthda.com/english/wiki/scatter-plot-matrices-r-base-graphs
+
+## pair-wise scatter plots, colored by factor
+pairs(df[,-c(1,11)], pch=16, col=as.factor(clean$Class))
+pairs(df[,-c(1,11)], panel = function(...) smoothScatter(..., add = T))
 cor(new)  # check correlation among the variables
 
 # method 2
@@ -222,6 +240,8 @@ qplot(df$y, geom="density", xlab="var.Y")
 # density plot for 7 groups
 ggplot(long, mapping = aes(fill = long$variable, x = long$value)) + geom_density(alpha = .5) 
     + scale_fill_manual(values = c("yellow", "red", "cyan","blue","orange","pink","green"))
+
+
 
 
 ### boxplot (comparison of variables X, Y, Z in dataframes l0, lL, lM, lH, lvH)  ###
@@ -362,17 +382,34 @@ color2D.matplot(z,c(1,0),c(0,1),c(0,0), show.legend=FALSE,xlab="Column",ylab="Ro
 library(corrplot)
 corrplot(t(mat),is.corr = FALSE, method='square')
 #corrplot(t(mat),is.corr = FALSE, method='color')
+# https://stackoverflow.com/questions/30743983/how-to-change-color-scheme-in-corrplot
+# https://www.r-bloggers.com/how-to-expand-color-palette-with-ggplot-and-rcolorbrewer
 # method 2
 heatmap(t(mat), Colv = F) #, scale= 'none')
 # method 3
 library(RColorBrewer)
-corrplot(t(mat),is.corr = FALSE, method='color', col=brewer.pal(n=9, name='Blues'), title='xx', mar=c(0,0,5,0), tl.cex=1.2, cl.cex=1.8) 
+corrplot(t(mat),is.corr = FALSE, method='color', col=brewer.pal(n=9, name='Blues'), title='xx', mar=c(0,0,5,0), 
+         tl.cex=1.2, cl.cex=1.8, tl.col = "black")  # tl.col: changes label color from default red to specified color
 # can also use: method='square', & remove the 'col' option above
 # method 4
 library(plotrix)
 color2D.matplot(t(mat), show.legend=FALSE,do.hex=FALSE,axes=TRUE,show.values=FALSE) 
+axis(1,at=0.5:29.5,labels=rownames(rms_m), las=2) 
+# las: to rotate label; # https://stackoverflow.com/questions/1828742/rotating-axis-labels-in-r
+# ?color2D.matplot
 #color2D.matplot(t(mat),c(1,0),c(0,1),c(0,0), show.legend=FALSE,do.hex=FALSE,axes=TRUE,show.values=FALSE) 
 
+### customised heat-map (with specified no. of colors)
+corrplot(t(reg_A),is.corr = FALSE, method='color', 
+         col=colorRampPalette(c("white","yellow","yellow green","green","dark green"))(20), 
+         title='region A', mar=c(0,0,0.8,0), tl.cex=1.5, cl.cex=1.0, 
+         tl.col = "black", addgrid.col="white" )
+# other color palettes: ("white","palegoldenrod","lightgoldenrod","gold","goldenrod3","goldenrod4"))(20), 
+#                       ("white","seashell1","pink","red","red4"))(20), 
+#                       ("white","light pink","pink","red","red4"))(20)
+
+      
+      
 # for use in correlation plot & not as heatmap
 t <- d[,c(5,9,15:ncol(d))]  # select numeric cols
 library(corrplot)
