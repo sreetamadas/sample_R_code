@@ -92,6 +92,9 @@ for (i in 1:k) {
   # MSE
   err.vect[i] <- mean((cv_test$Y - predict(fit, newdata=cv_test))^2)  # error on test set
   mse <- mean((cv_train$Y - predict(fit, data=cv_train))^2)    # error on training set
+  rmse_test <- sqrt(mean((cv_test$Y - predict(fit, newdata=cv_test))^2))
+  rmse_train <- sqrt(mean((cv_train$Y - predict(fit, data=cv_train))^2))
+
   
   print(paste("fold ",i,", MSE (test):", err.vect[i],", r2 (test):", r2,", MSE <train>: ",mse,", r2 <train>; ",r2_train)) 
   varImpPlot(fit, sort = T, main=paste("Variable Importance, ntree=",fit$ntree,", fold=",i, sep =' '), n.var=15)
