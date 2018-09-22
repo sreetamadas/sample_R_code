@@ -280,7 +280,15 @@ ggplot(new_df, aes(as.factor(new_df$hr), new_df$y)) + geom_boxplot(width=0.3) +
     geom_point(size=2, aes(color = new_df$col)) + scale_colour_manual(values=Palette1) + # geom_point(position="jitter"
     labs(x="time of day (hr)", y="energy") +  geom_jitter(position = position_jitter(width = 0.1, height = 0.01)) +
     theme(axis.text=element_text(size=16),axis.title=element_text(size=18), axis.text.x = element_text(angle = 90, hjust = 1))
- 
+
+# boxplot-distribution by class
+library(reshape2)
+dfmelt <- melt(df, measure.vars=2:10)
+library(ggplot2)
+ggplot(dfmelt, aes(Class, value, fill=variable))+
+  geom_boxplot() + 
+  #geom_jitter(size=0.8) + 
+  facet_wrap(~variable)      
 
 
 ### violin plot (check bean plot: http://exploringdatablog.blogspot.in/2011/03/boxplots-beyond-iv-beanplots.html) ###
