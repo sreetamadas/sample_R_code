@@ -38,6 +38,17 @@ new_df <- data.frame(entry=numeric(),
 mat <- matrix(as.numeric(unlist(df[1:34])), nrow=nrow(df))
 
 ##################################################################################################
+## combine multiple lists into a df
+IDlist_event <- c("0102012048701","0102012048702","0102012048703","0102012048704","0102012048705",
+                    "0102012048706","0102012048707","0102012048708",
+                    "030900056301", "041900824401","0308002181301","010100821701")  # rotaryOven
+
+a <- c("IF1","IF2","IF3","IF4","IF5","IF6","IF7","IF8","rotaryOven","nonVgColdRoom","spiralMixerBG",
+        "ODCcheeseDairy")  #"deckOven",
+dev_id <- data.frame(IDlist_event,a)
+colnames(dev_id) <- c('Appliance.ID','Appliance.Name')
+
+#######################################################################################################
 ## read a specific sheet from a multi-sheet excel
 library(readxl)
 df <- read_excel(paste(path,"data/file name.xlsx",sep=''), sheet = 'sheet 1', skip=1)    # skip extra rows at start apart from col header
