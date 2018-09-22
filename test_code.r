@@ -34,6 +34,10 @@ new_df <- data.frame(entry=numeric(),
 )
 
 ##################################################################################################
+### convert dataframe to matrix
+mat <- matrix(as.numeric(unlist(df[1:34])), nrow=nrow(df))
+
+##################################################################################################
 ## read a specific sheet from a multi-sheet excel
 library(readxl)
 df <- read_excel(paste(path,"data/file name.xlsx",sep=''), sheet = 'sheet 1', skip=1)    # skip extra rows at start apart from col header
