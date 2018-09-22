@@ -46,6 +46,8 @@ raw_input[raw_input==""] <- NA
 ## remove rows with NA
 #prdcn <- raw_input[complete.cases(raw_input[,col1:col2]),]
 #prdcn <- raw_input[complete.cases(raw_input[,col3:col4]),]
+# remove rows with no dateTime
+d <- d[!is.na(d$timestamp),]
 
 
 ### Method 2 ###
