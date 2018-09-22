@@ -195,8 +195,11 @@ cols <- c(2:13)    ##t[cols] <- gsub(" ", '_', t[cols])   #[t == " "] <- "_"
 t[cols] <- as.data.frame(apply(t[cols],2,function(x)gsub('\\s+', '_',x)))             
              
 #####################################################################################################
-## fill in rows corresponding to added timestamps
-#library(padr)  pad(a)
+## add extra rows corresponding to missing time stamps
+library(padr)  
+df <- pad(df)  
+                               
+## fill in rows, corresponding to added timestamps, with previous values
 library(zoo)             
 df <- na.locf(df, fromLast = TRUE)
               
