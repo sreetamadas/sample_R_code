@@ -356,10 +356,13 @@ ggplot(df, aes(x= reorder(df$Model,-df$value), df$value, fill=df$value)) +
 # method 1
 ggplot(data = df, aes(as.POSIXct(df$Date), df$continuous_var, colour=as.factor(df$categorical_var))) + 
           geom_bar(stat="identity", aes(fill=as.factor(df$categorical_var))) + scale_fill_brewer(palette = 12)
-# method 2
+# method 2 - for long format data
+library(reshape2)
+df <- melt(sub_df, id.vars = c("date"))
 ggplot(data = df, aes(as.POSIXct(df$Date), df$continuous_var, group = df$categorical_var, fill = df$categorical_var)) +
   geom_bar(stat = "identity", width = 0.5) + labs(x='week',y='avg energy') +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  scale_fill_manual(values = c("orange","cyan","blue","grey","green","salmon","yellow","red"))  # for 8 groups
 
 ## bar Chart for multiple categories without stacking: remove the option: position="dodge" to get stacked chart)
 # https://stackoverflow.com/questions/30023610/how-to-plot-2-categorical-variables-on-x-axis-and-two-continuous-variables-as-f
