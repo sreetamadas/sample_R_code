@@ -253,7 +253,13 @@ idList <-  as.character(sort(unique(df$ID))) ## get unique IDs in column
 ## finding unique entries
 library(sqldf)
 array_name = sqldf("select DISTINCT sno as 'sensor ID' from dat")
-                          
+                           
+                           
+## method 4:
+library(dplyr)
+df %>% 
+  group_by(class) %>%
+  summarise(no_rows = length(class))                           
                            
 ########################################################################################################
 #### calculate statistical parameters for data grouped by factors ###
