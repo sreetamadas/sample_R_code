@@ -35,7 +35,7 @@ remove days(=1) with booking date after departure date
 eliminate 7 data points with -ve values of base, local & lowest fare
 remove rows with NA
 # finally, left with 1921 entries
-
+ 
 
 ## create new features:
 travel month , 
