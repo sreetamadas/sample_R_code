@@ -54,10 +54,10 @@ number of days between booking and return dates
 
 
 ### sample prediction ####
-for BOSTON- NEW YORK Route: create a new dataframe with different combinations of airports for New York, different month, day of week, 
+for BOSTON- NEW YORK Route: created a new dataframe with different combinations of airports for New York, different month, day of week, 
 number of days between booking and departure dates & number of days between booking and return dates.
 
-following are the predictions:
+following are the predictions, using the newly created values as input:
 Travel month      range of ticket price
 1                   227.2 - 359.2
 2                   188.6 - 289.4
