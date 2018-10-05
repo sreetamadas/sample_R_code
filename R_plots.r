@@ -518,6 +518,11 @@ axis(4)
 mtext("Y",side=2,line=2)
 mtext("Z",side=4,line=3)
 legend("bottomleft",col=c("red","blue","green","black"),lty=1,legend=c("Y1","Y2","Y3","Z"))
+# http://www.sthda.com/english/wiki/line-types-in-r-lty
+# https://stat.ethz.ch/R-manual/R-devel/library/graphics/html/plot.default.html
+# http://www.endmemo.com/program/R/pchsymbols.php
+# https://stackoverflow.com/questions/3785089/change-the-spacing-of-tick-marks-on-the-axis-of-a-plot
+
 
 ## dual axis plot using ggplot : stacked bar + line
 # https://stackoverflow.com/questions/44640970/ggplot2-barplot-lineplot-dual-y-axis
