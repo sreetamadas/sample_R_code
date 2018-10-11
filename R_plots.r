@@ -55,7 +55,7 @@ for(i in 4:ncol(df)) {
 }
 
 ###############################################################################################
-#### control axis labeling ###
+#### control axis labeling ###     (see line 58, 416, 532)
 
 ## method 1
 png('newFig.png', h=3000, w=6000 )
@@ -413,7 +413,7 @@ corrplot(t(mat),is.corr = FALSE, method='color', col=brewer.pal(n=9, name='Blues
 # method 4
 library(plotrix)
 color2D.matplot(t(mat), show.legend=FALSE,do.hex=FALSE,axes=TRUE,show.values=FALSE) 
-axis(1,at=0.5:29.5,labels=rownames(rms_m), las=2) 
+axis(1,at=0.5:29.5,labels=rownames(rms_m), las=2)    #    (see line 58, 416, 532)
 # las: to rotate label; # https://stackoverflow.com/questions/1828742/rotating-axis-labels-in-r
 # ?color2D.matplot
 #color2D.matplot(t(mat),c(1,0),c(0,1),c(0,0), show.legend=FALSE,do.hex=FALSE,axes=TRUE,show.values=FALSE) 
@@ -528,7 +528,7 @@ legend("bottomleft",col=c("red","blue","green","black"),lty=1,legend=c("Y1","Y2"
 # https://stat.ethz.ch/R-manual/R-devel/library/graphics/html/plot.default.html
 # http://www.endmemo.com/program/R/pchsymbols.php           # pch=1,2,16
 
-# https://stackoverflow.com/questions/3785089/change-the-spacing-of-tick-marks-on-the-axis-of-a-plot
+# https://stackoverflow.com/questions/3785089/change-the-spacing-of-tick-marks-on-the-axis-of-a-plot   ##  (see line 58, 416, 532)
 plot(df$x, df$y, type='b',pch=16,lwd=4, col="red", xlim=c(0,101),ylim=c(0.70,0.97), ylab="Y", xlab='X',xaxp  = c(1, 101, 50))
 # put 50 ticks between 1 & 101
 
