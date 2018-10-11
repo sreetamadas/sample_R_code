@@ -292,6 +292,8 @@ ggplot(dfmelt, aes(Class, value, fill=variable))+
   facet_wrap(~variable)      
 
 
+      
+      
 ### violin plot (check bean plot: http://exploringdatablog.blogspot.in/2011/03/boxplots-beyond-iv-beanplots.html) ###
 # method 1
 library(vioplot)
@@ -397,13 +399,17 @@ corrplot(t(mat),is.corr = FALSE, method='square')
 #corrplot(t(mat),is.corr = FALSE, method='color')
 # https://stackoverflow.com/questions/30743983/how-to-change-color-scheme-in-corrplot
 # https://www.r-bloggers.com/how-to-expand-color-palette-with-ggplot-and-rcolorbrewer
+
 # method 2
 heatmap(t(mat), Colv = F) #, scale= 'none')
+      
 # method 3
 library(RColorBrewer)
 corrplot(t(mat),is.corr = FALSE, method='color', col=brewer.pal(n=9, name='Blues'), title='xx', mar=c(0,0,5,0), 
          tl.cex=1.2, cl.cex=1.8, tl.col = "black")  # tl.col: changes label color from default red to specified color
+# color schemes in brewer: Blues, Greens, Oranges, Reds
 # can also use: method='square', & remove the 'col' option above
+      
 # method 4
 library(plotrix)
 color2D.matplot(t(mat), show.legend=FALSE,do.hex=FALSE,axes=TRUE,show.values=FALSE) 
@@ -509,7 +515,7 @@ ggplot(x, aes(x$DateTime, x$continuous_var, group = x$categorical_var, colour=as
 par(mar=c(5,4,4,5)+.1)  # sets bottom, left, top and right margins respectively of the plot region in number of lines of text
 plot(x,y1,type="l", lwd=2, col="red", xlab="",ylab="", ylim=c(0,250))
 par(new=T)
-lines(x,y2,type="l", lwd=2, col="blue", xlab="",ylab="")
+lines(x,y2,type="l", lwd=2, col="blue", xlab="",ylab="")   # type= "l", "b"
 par(new=T)
 lines(x,y3,type="l", lwd=2, col="green", xlab="",ylab="")
 par(new=T)
@@ -518,10 +524,13 @@ axis(4)
 mtext("Y",side=2,line=2)
 mtext("Z",side=4,line=3)
 legend("bottomleft",col=c("red","blue","green","black"),lty=1,legend=c("Y1","Y2","Y3","Z"))
-# http://www.sthda.com/english/wiki/line-types-in-r-lty
+# http://www.sthda.com/english/wiki/line-types-in-r-lty     # lty=2 -> dashed line
 # https://stat.ethz.ch/R-manual/R-devel/library/graphics/html/plot.default.html
-# http://www.endmemo.com/program/R/pchsymbols.php
+# http://www.endmemo.com/program/R/pchsymbols.php           # pch=1,2,16
+
 # https://stackoverflow.com/questions/3785089/change-the-spacing-of-tick-marks-on-the-axis-of-a-plot
+plot(df$x, df$y, type='b',pch=16,lwd=4, col="red", xlim=c(0,101),ylim=c(0.70,0.97), ylab="Y", xlab='X',xaxp  = c(1, 101, 50))
+# put 50 ticks between 1 & 101
 
 
 ## dual axis plot using ggplot : stacked bar + line
