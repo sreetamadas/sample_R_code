@@ -32,3 +32,8 @@ install.packages("lubridate")
 sqldf
 padr
 caret
+
+library(ROSE)   ## look at ROSE & smote for data oversampling
+
+
+
