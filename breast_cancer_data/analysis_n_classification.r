@@ -127,13 +127,13 @@ y <- clean[,11]
 scales <- list(x=list(relation="free"), y=list(relation="free"))
 # the above results in plots with individual scales for each var;
 # remove this option to plot on same scale for all
-featurePlot(x=x, y=y, plot="density", scales=scales)
+featurePlot(x=x, y=y, plot="density", scales=scales)   #### PLOT ####
 
 
 # distribution of pairwise variables
 # https://rstudio-pubs-static.s3.amazonaws.com/12556_4e02f5564dc24b57b7a8f6d95d2a5cf7.html
 # http://www.sthda.com/english/wiki/scatter-plot-matrices-r-base-graphs
-pairs(clean[,-c(1,11)], pch=16, col=as.factor(clean$Class))
+pairs(clean[,-c(1,11)], pch=16, col=as.factor(clean$Class))                  #### PLOT ####
 pairs(clean[,-c(1,11)], panel = function(...) smoothScatter(..., add = T))
 
 
