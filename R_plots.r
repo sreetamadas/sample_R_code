@@ -399,7 +399,12 @@ corrplot(t(mat),is.corr = FALSE, method='square')
 #corrplot(t(mat),is.corr = FALSE, method='color')
 # https://stackoverflow.com/questions/30743983/how-to-change-color-scheme-in-corrplot
 # https://www.r-bloggers.com/how-to-expand-color-palette-with-ggplot-and-rcolorbrewer
-
+# https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html
+# https://stackoverflow.com/questions/14753344/corrplot-parameters-in-r
+# https://stackoverflow.com/questions/26574054/how-to-change-font-size-of-the-correlation-coefficient-in-corrplot      
+# http://www.sthda.com/english/wiki/correlation-matrix-a-quick-start-guide-to-analyze-format-and-visualize-a-correlation-matrix-using-r-software
+      
+      
 # method 2
 heatmap(t(mat), Colv = F) #, scale= 'none')
       
@@ -422,7 +427,7 @@ axis(1,at=0.5:29.5,labels=rownames(rms_m), las=2)    #    (see line 58, 416, 532
 corrplot(t(reg_A),is.corr = FALSE, method='color', 
          col=colorRampPalette(c("white","yellow","yellow green","green","dark green"))(20), 
          title='region A', mar=c(0,0,0.8,0), tl.cex=1.5, cl.cex=1.0, 
-         tl.col = "black", addgrid.col="white" )
+         tl.col = "black", addgrid.col="white", addCoef.col="black", number.cex=1.5 )
 # other color palettes: ("white","palegoldenrod","lightgoldenrod","gold","goldenrod3","goldenrod4"))(20), 
 #                       ("white","seashell1","pink","red","red4"))(20), 
 #                       ("white","light pink","pink","red","red4"))(20)
