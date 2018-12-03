@@ -373,8 +373,67 @@ ggplot(data = wk_df1, aes(as.POSIXct(df$Date), df$continuous_var, group = df$cat
   geom_bar(stat = "identity", width = 0.5, position = "dodge") + labs(x='week',y='avg energy') +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
+      
 
+######## barplot with error bar ########
+# https://www.r-graph-gallery.com/4-barplot-with-error-bar/   *** used this link
+# https://heuristically.wordpress.com/2013/10/20/bar-plot-with-error-bars-r/
+# https://stackoverflow.com/questions/44872951/how-do-i-add-se-error-bars-to-my-barplot-in-ggplot2
+# http://stulp.gmw.rug.nl/ggplotworkshop/comparinggroupstatistics.html    
+      
+# https://stackoverflow.com/questions/28816467/ggplot-position-legend-in-top-left  
 
+# https://stackoverflow.com/questions/22053139/r-ggplot-placing-labels-on-error-bars
+# https://stackoverflow.com/questions/6455088/how-to-put-labels-over-geom-bar-in-r-with-ggplot2
+# https://stackoverflow.com/questions/44872951/how-do-i-add-se-error-bars-to-my-barplot-in-ggplot2
+# http://www.sthda.com/english/wiki/ggplot2-error-bars-quick-start-guide-r-software-and-data-visualization
+library(dplyr)
+
+data <- df %>% select(Method, RMSE)    # 'Method' is the name of the group here , RMSE is the Y-var
+# Calculates mean, sd, se and IC (confidence interval)
+my_sum <- data %>%
+  group_by(Method) %>%
+  summarise( 
+    n=n(),
+    mean=mean(RMSE),
+    sd=sd(RMSE)
+  ) %>%
+  mutate( se=sd/sqrt(n))  %>%
+  mutate( ic=se * qt((1-0.05)/2 + .5, n-1))
+my_sum$group <- 'mean RMSE'
+
+data2 <- df %>% select(Method, Correlation) 
+# Calculates mean, sd, se and IC
+my_sum2 <- data2 %>%
+  group_by(Method) %>%
+  summarise( 
+    n=n(),
+    mean=mean(Correlation),
+    sd=sd(Correlation)
+  ) %>%
+  mutate( se=sd/sqrt(n))  %>%
+  mutate( ic=se * qt((1-0.05)/2 + .5, n-1))
+  #mutate( ic2=se * qt(1-0.05/2, n))
+my_sum2$group <- 'mean correlation'
+
+## merge the two dataframes
+long <- rbind(my_sum, my_sum2)
+long$Method <- factor(long$Method, 
+                      levels = c("method1" , "method2" , "method3" , "method4" , "method5" , "method6"))
+      
+ ggplot(long, aes(Method, mean, group = group, fill = group)) +
+  geom_bar( stat="identity",  position = "dodge") + # alpha=0.5,
+  geom_errorbar( aes(x=Method, ymin=mean-ic, ymax=mean+ic), 
+                 width=0.2, colour="black", alpha=0.9, size=1.5, position=position_dodge(.9)) + 
+  geom_text(aes(label = round(mean+ic, digits=3), y = round(mean+ic, digits=3)), vjust = -.5) +
+  geom_text(aes(label = round(mean-ic, digits=3), y = round(mean-ic, digits=3)), vjust = 1.5) +
+  labs(x='', y='mean') + 
+  scale_fill_manual(values = c("chocolate2","deepskyblue3")) +
+  theme(axis.text=element_text(size=14), axis.title=element_text(size=16), 
+        legend.justification=c(1,1),legend.position=c(1,1),legend.title=element_blank(), legend.text=element_text(size=12))
+  
+     
+      
 
 ### bubble plot ###
 symbols(df$X, df$Y, circles=df$size)
