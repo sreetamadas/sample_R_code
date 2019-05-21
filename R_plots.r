@@ -154,17 +154,6 @@ ggplot(data=new_df, aes(as.Date(new_df$date), new_df$Y, colour=as.factor(new_df$
 
 
 
-
-### show (density) distribution of variables in a dataframe, by factor
-library(caret)
-x <- df[,2:10]   # also, check with dTraining & dTest
-y <- df[,11]
-scales <- list(x=list(relation="free"), y=list(relation="free"))
-# the above results in plots with individual scales for each var; remove this option to plot on the same scale for all
-featurePlot(x=x, y=y, plot="density", scales=scales)
-
-
-
 ### SCATTER plot for ALL variables in a dataframe : distribution of pairwise variables ###
 new <- df[,5:8]  # save columns 5-8 with numeric data fram df  ; # new <- df[,c(2,9,15:ncol(df))]
 pairs(new)  # plots the paired scatterplots
@@ -232,7 +221,7 @@ hist(df$y, xlab="var. Y", breaks=seq(0,175,by=5), cex.main=1.5, cex.lab=1.5, cex
 # density plot
 hist(df$y, freq=FALSE, xlab="var. Y")  
 # method 2: histogram using ggplot
-qplot(df$y, geom="histogram", binwidth=2, xlab="var.Y)")+
+qplot(df$y, geom="histogram", binwidth=2, xlab="var.Y", col=I('white')) +  ## the col option separates the bars by white lines 
   theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold")) + 
   xlim(min(df$y), (min(df$y) + 150))  
 # density plot in ggplot
@@ -241,6 +230,15 @@ qplot(df$y, geom="density", xlab="var.Y")
 # density plot for 7 groups
 ggplot(long, mapping = aes(fill = long$variable, x = long$value)) + geom_density(alpha = .5) 
     + scale_fill_manual(values = c("yellow", "red", "cyan","blue","orange","pink","green"))
+      
+
+### show (density) distribution of variables in a dataframe, by factor
+library(caret)
+x <- df[,2:10]   # also, check with dTraining & dTest
+y <- df[,11]
+scales <- list(x=list(relation="free"), y=list(relation="free"))
+# the above'scales' option results in plots with individual scales for each var; remove this option to plot on the same scale for all
+featurePlot(x=x, y=y, plot="density", scales=scales, auto.key = list(columns = 4))  # auto.key is for legends; there are 4 groups here 
 
 
 
