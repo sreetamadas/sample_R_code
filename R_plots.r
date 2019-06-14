@@ -186,7 +186,19 @@ ggplot(data=df, aes(df$ab, df$bc, color=fac)) + geom_point(alpha=0.3) +
 
 
 
-
+#### 2D scatter plot + histogram ####
+library(ggpubr)
+ggscatterhist(
+  df, x= "independentColName", y= "dependentColName",
+  color="FactorColName",
+  size=2, alpha=0.6,
+  palette = c("red","blue"),
+)      
+# https://rpkgs.datanovia.com/ggpubr/reference/ggscatterhist.html
+# http://www.sthda.com/english/articles/24-ggpubr-publication-ready-plots/78-perfect-scatter-plots-with-correlation-and-marginal-histograms/
+# https://seaborn.pydata.org/generated/seaborn.jointplot.html  (PYTHON)      
+      
+      
 ### 3D scatterplots ###
 # method 1
 library(scatterplot3d)
@@ -414,7 +426,7 @@ my_sum2 <- data2 %>%
   #mutate( ic2=se * qt(1-0.05/2, n))
 my_sum2$group <- 'mean correlation'
 
-## merge the two dataframes
+# merge the two dataframes
 long <- rbind(my_sum, my_sum2)
 long$Method <- factor(long$Method, 
                       levels = c("method1" , "method2" , "method3" , "method4" , "method5" , "method6"))
@@ -443,6 +455,8 @@ symbols(df$X, df$Y, circles=radius, bg=as.numeric(df$size), xlab= "bin", ylab= "
 # http://www.sthda.com/english/articles/24-ggpubr-publication-ready-plots/78-perfect-scatter-plots-with-correlation-and-marginal-histograms/      
 
 
+      
+      
 ### plot a matrix z by color ###
 library(plotrix)
 attach(mtcars, warn.conflicts = FALSE)
@@ -497,7 +511,8 @@ t <- d[,c(5,9,15:ncol(d))]  # select numeric cols
 library(corrplot)
 t <- t[,apply(t, 2, var, na.rm=TRUE) != 0]  # remove NA values, & cols with variance = 0
 corrplot(cor(t),type="lower", method="color", tl.cex=0.6, cl.cex=0.8)
-
+     
+      
 
 ###############################################################
 ### color & shape by factor
