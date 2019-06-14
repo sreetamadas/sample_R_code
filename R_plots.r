@@ -439,7 +439,8 @@ radius <- sqrt( df$size/ pi )
 symbols(df$X, df$Y, circles=radius)
 #symbols(df$X, df$Y, circles=radius, bg=as.numeric(df$X))
 symbols(df$X, df$Y, circles=radius, bg=as.numeric(df$size), xlab= "bin", ylab= "SD")
-
+# alternate option, see link below
+# http://www.sthda.com/english/articles/24-ggpubr-publication-ready-plots/78-perfect-scatter-plots-with-correlation-and-marginal-histograms/      
 
 
 ### plot a matrix z by color ###
