@@ -142,6 +142,7 @@ ggplot(data=df, aes(as.POSIXct(df$time), df$y)) + geom_point(size=0.2, colour=as
   labs(x="time", y="Y") + ylim(0,180) + 
   geom_line(size=0.1, colour=as.factor(df$colour)) +  # colour="blue"
   geom_hline(data=df, aes(yintercept=10), linetype='dashed') +  # adding horizontal line to plot
+  geom_abline(intercept=0,slope=1) +  ## adding line passing through (0,0) & (1,1)
   theme(axis.text=element_text(size=14), axis.title=element_text(size=14,face="bold"))) 
 # formatting date time breaks on X-axis
 library(scales)
@@ -199,6 +200,7 @@ ggscatterhist(
 # https://seaborn.pydata.org/generated/seaborn.jointplot.html  (PYTHON)      
       
       
+      
 ### 3D scatterplots ###
 # method 1
 library(scatterplot3d)
@@ -235,7 +237,11 @@ hist(df$y, freq=FALSE, xlab="var. Y")
 # method 2: histogram using ggplot
 qplot(df$y, geom="histogram", binwidth=2, xlab="var.Y", col=I('white')) +  ## the col option separates the bars by white lines 
   theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold")) + 
-  xlim(min(df$y), (min(df$y) + 150))  
+  xlim(min(df$y), (min(df$y) + 150)) 
+# without using qplot
+ggplot(df, aes(x = df$val)) + geom_histogram(aes(y = ..count..), binwidth=1, col=I('white')) + 
+  labs(x='value') + facet_wrap(~df$iteration, nrow=3)  # facet_wrap plots multiple histograms for multiple groups
+
 # density plot in ggplot
 qplot(df$y, geom="density", xlab="var.Y")
 
