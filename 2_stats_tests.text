@@ -2,3 +2,6 @@ https://towardsdatascience.com/anova-t-test-and-other-statistical-tests-with-pyt
 https://www.investopedia.com/terms/t/t-test.asp#:~:text=A%20large%20t%2Dscore%2C%20or,validity%20of%20the%20null%20hypothesis.   #T-Test: What It Is With Multiple Formulas and When To Use Them
 https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ttest_ind.html
 https://pythonguides.com/python-scipy-ttest_ind/
+
+https://towardsdatascience.com/every-statistical-test-to-check-feature-dependence-773a21cd6722#:~:text=ANOVA%20test&text=It%20is%20set%20up%20as,or%20accept%20the%20null%2Dhypothesis.
+http://www.biostathandbook.com/hypothesistesting.html
